@@ -34,7 +34,6 @@
 
 ### Integração
 - **google-api-python-client** - APIs do Google
-- **aiofiles** - Gestão assíncrona de ficheiros
 - **python-multipart** - Upload de ficheiros
 
 ## ⚡ Instalação Rápida

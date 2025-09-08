@@ -6,7 +6,6 @@ from typing import List
 import os
 import json
 from datetime import datetime
-import aiofiles
 import gspread
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
