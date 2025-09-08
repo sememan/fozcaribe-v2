@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+
+{% block title %}Pré-inscrição - FozCaribe{% endblock %}
+
+{% block content %}
+<section class="py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                Bem vindo/a futuro/a <span class="bg-gradient-to-r from-brand-600 to-blue-600 bg-clip-text text-transparent">Caribenho/a</span>
+            </h1>
+            <div class="max-w-3xl mx-auto text-left bg-white rounded-2xl shadow-xl p-8 mb-8">
+                <p class="text-lg text-gray-700 mb-4">
+                    Aqui está o formulário para te pré-inscreveres no ano letivo 25/26.
+                </p>
+                <div class="bg-blue-50 border-l-4 border-blue-500 p-4 mb-6">
+                    <p class="text-blue-800 font-medium">
+                        A pré-inscrição é válida apenas para as duas primeiras aulas gratuitas, nos dias <strong>23 e 30 de setembro</strong>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg">
+            <div class="flex">
+                <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                <p class="text-red-700">{{ error }}</p>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Informações das Aulas -->
+            <div class="lg:col-span-1">
+                <div class="bg-gradient-to-br from-brand-50 to-blue-50 rounded-2xl p-6 mb-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">
+                        <i class="fas fa-clock text-brand-600 mr-2"></i>
+                        Horário das Aulas
+                    </h3>
+                    <p class="text-gray-700 font-medium">Terças às 21h</p>
+                    <p class="text-sm text-gray-600">Aula gratuita aberta</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-6 mb-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">
+                        <i class="fas fa-map-marker-alt text-green-600 mr-2"></i>
+                        Morada da Escola
+                    </h3>
+                    <div class="text-gray-700">
+                        <p class="font-medium">Tao Yoga e Bem-Estar</p>
+                        <p>R. Fernando Tomás 15, 1º</p>
+                        <p>3080-055 Figueira da Foz</p>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">
+                        <i class="fas fa-euro-sign text-purple-600 mr-2"></i>
+                        Mensalidade Basal
+                    </h3>
+                    <p class="text-2xl font-bold text-purple-600 mb-2">25€</p>
+                    <p class="text-sm text-gray-600">
+                        *Mensalidade para o nível Iniciado. Para níveis acima de Iniciado, acresce valor.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Formulário -->
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-2xl shadow-xl p-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">
+                        <i class="fas fa-music text-brand-600 mr-2"></i>
+                        Formulário Duas Aulas Gratuitas
+                    </h2>
+                    <p class="text-center text-gray-600 mb-8">Terça 23 e 30 Setembro</p>
+
+                    <form method="post" class="space-y-6">
+                        <div>
+                            <label for="name" class="block text-sm font-semibold text-gray-700 mb-3">
+                                <i class="fas fa-user text-brand-600 mr-2"></i>
+                                Primeiro Nome e Apelido *
+                            </label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name" 
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-gray-900 placeholder-gray-500"
+                                placeholder="Ex: João Silva"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="phone" class="block text-sm font-semibold text-gray-700 mb-3">
+                                <i class="fas fa-phone text-brand-600 mr-2"></i>
+                                Telemóvel *
+                            </label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                name="phone"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-gray-900 placeholder-gray-500"
+                                placeholder="+351 912 345 678"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-sm font-semibold text-gray-700 mb-3">
+                                <i class="fas fa-envelope text-brand-600 mr-2"></i>
+                                Email
+                            </label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-gray-900 placeholder-gray-500"
+                                placeholder="seu.email@exemplo.com"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="city" class="block text-sm font-semibold text-gray-700 mb-3">
+                                <i class="fas fa-map-marker-alt text-brand-600 mr-2"></i>
+                                Cidade (onde resides) *
+                            </label>
+                            <input 
+                                type="text" 
+                                id="city" 
+                                name="city"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-gray-900 placeholder-gray-500"
+                                placeholder="Ex: Figueira da Foz"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="level" class="block text-sm font-semibold text-gray-700 mb-3">
+                                <i class="fas fa-chart-line text-brand-600 mr-2"></i>
+                                Mensalidade e Nível que pretendes *
+                            </label>
+                            <select 
+                                id="level" 
+                                name="level"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-gray-900"
+                            >
+                                <option value="" disabled selected>Seleciona o nível</option>
+                                <option value="Basal">Mensalidade Basal - Nível Iniciado</option>
+                                <option value="Plus">Mensalidade Plus - Nível Iniciado e acima</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="inscription_type" class="block text-sm font-semibold text-gray-700 mb-3">
+                                <i class="fas fa-calendar text-brand-600 mr-2"></i>
+                                Tipo de Inscrição *
+                            </label>
+                            <select 
+                                id="inscription_type" 
+                                name="inscription_type"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-gray-900"
+                            >
+                                <option value="" disabled selected>Seleciona o tipo</option>
+                                <option value="PRÉ-INSCRIÇÃO">PRÉ-INSCRIÇÃO - Quero experimentar as aulas gratuitas</option>
+                                <option value="INSCRIÇÃO">INSCRIÇÃO - Sou novo/a e quero inscrever-me</option>
+                                <option value="RENOVAÇÃO">RENOVAÇÃO - Já sou aluno/a e pretendo renovar a inscrição</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="dance_style" class="block text-sm font-semibold text-gray-700 mb-3">
+                                <i class="fas fa-music text-brand-600 mr-2"></i>
+                                Estilo de Dança Preferido *
+                            </label>
+                            <select 
+                                id="dance_style" 
+                                name="dance_style"
+                                required
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-gray-900"
+                            >
+                                <option value="" disabled selected>Seleciona o teu estilo preferido</option>
+                                <option value="Merengue">Merengue</option>
+                                <option value="Bachata">Bachata</option>
+                                <option value="Salsa">Salsa</option>
+                                <option value="Kizomba">Kizomba</option>
+                                <option value="Chachachá">Chachachá</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="message" class="block text-sm font-semibold text-gray-700 mb-3">
+                                <i class="fas fa-comment text-brand-600 mr-2"></i>
+                                Nota
+                            </label>
+                            <textarea 
+                                id="message" 
+                                name="message" 
+                                rows="4"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-gray-900 placeholder-gray-500 resize-none"
+                                placeholder="Alguma observação ou pergunta..."
+                            ></textarea>
+                        </div>
+
+                        <div class="pt-4">
+                            <button 
+                                type="submit"
+                                class="w-full bg-gradient-to-r from-brand-600 to-blue-600 hover:from-brand-700 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-brand-300"
+                            >
+                                <i class="fas fa-check mr-2"></i>
+                                Registar para Aulas Gratuitas
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nota Final -->
+        <div class="mt-12 bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+            <div class="flex items-start">
+                <i class="fas fa-info-circle text-yellow-600 mt-1 mr-3"></i>
+                <div>
+                    <h4 class="font-semibold text-yellow-800 mb-2">Nota Importante</h4>
+                    <p class="text-yellow-700 text-sm leading-relaxed">
+                        As condições vão-se manter aproximadamente as mesmas do ano letivo passado. 
+                        Os detalhes de horário, mensalidade e afins serão comunicados durante o período das aulas de setembro.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

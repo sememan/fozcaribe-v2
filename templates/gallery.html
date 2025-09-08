@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}Galeria - FozCaribe{% endblock %}
+
+{% block content %}
+<section class="py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                A Nossa <span class="bg-gradient-to-r from-brand-600 to-blue-600 bg-clip-text text-transparent">Galeria</span>
+            </h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Descubra a beleza e elegância que o espera. Cada imagem conta uma história de excelência caribenha e sofisticação moderna.
+            </p>
+        </div>
+
+        {% if images %}
+        <!-- Gallery Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for image in images %}
+            <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:scale-105">
+                <div class="aspect-square bg-gray-200 relative">
+                    {% if image.isVideo %}
+                    <!-- Video Embed from Google Drive -->
+                    <div class="w-full h-full relative">
+                        <iframe 
+                            src="{{ image.url }}" 
+                            class="w-full h-full object-cover"
+                            frameborder="0"
+                            allow="autoplay; encrypted-media"
+                            allowfullscreen
+                        ></iframe>
+                        <!-- Video Play Icon Overlay -->
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="bg-black/50 rounded-full p-4 opacity-80">
+                                <i class="fas fa-play text-white text-2xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <!-- Image Element -->
+                    <img 
+                        src="{{ image.url }}" 
+                        alt="Gallery Image"
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        loading="lazy"
+                    >
+                    {% endif %}
+                    
+                    <!-- Overlay senza titoli per questa gallery -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <!-- Solo overlay di colore, senza testo -->
+                    </div>
+                    <!-- View Button -->
+                    <div class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <button 
+                            onclick="openModal('{{ image.url }}', {{ image.isVideo|lower }})"
+                            class="bg-white/20 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/30 transition-colors"
+                        >
+                            <i class="fas fa-{% if image.isVideo %}play{% else %}expand{% endif %} text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <!-- Empty State -->
+        <div class="text-center py-20">
+            <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-8">
+                <i class="fas fa-images text-gray-400 text-3xl"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-4">Galeria Em Breve</h3>
+            <p class="text-gray-600 mb-8 max-w-md mx-auto">
+                Estamos a curar uma coleção incrível de imagens para mostrar a experiência FozCaribe. 
+                Volte em breve para visuais deslumbrantes!
+            </p>
+            <a href="/preregister" class="inline-block bg-brand-600 hover:bg-brand-700 text-white px-8 py-3 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+                <i class="fas fa-bell mr-2"></i>
+                Ser Notificado Quando Estiver Pronto
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Call to Action -->
+        <div class="mt-20 text-center bg-gradient-to-r from-brand-600 to-blue-600 rounded-2xl p-12 text-white">
+            <h2 class="text-3xl lg:text-4xl font-bold mb-6">
+                Pronto para Fazer Parte Desta Experiência?
+            </h2>
+            <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                Junte-se à nossa comunidade e seja o primeiro a experimentar tudo o que o FozCaribe tem para oferecer.
+            </p>
+            <a href="/preregister" class="inline-block bg-white hover:bg-gray-100 text-brand-600 px-10 py-4 rounded-xl text-lg font-bold transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+                <i class="fas fa-rocket mr-2"></i>
+                Começar a Sua Jornada
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Modal for Image/Video Viewing -->
+<div id="mediaModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="relative max-w-4xl max-h-full w-full">
+        <button 
+            onclick="closeModal()"
+            class="absolute -top-4 -right-4 bg-white text-gray-900 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors z-10"
+        >
+            <i class="fas fa-times"></i>
+        </button>
+        <!-- Image Element -->
+        <img 
+            id="modalImage" 
+            src="" 
+            alt="Gallery Image" 
+            class="max-w-full max-h-full object-contain rounded-xl shadow-2xl hidden"
+        >
+        <!-- Video Iframe Element -->
+        <iframe 
+            id="modalVideo" 
+            src="" 
+            class="w-full h-96 rounded-xl shadow-2xl hidden"
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen
+        ></iframe>
+    </div>
+</div>
+
+<script>
+function openModal(mediaSrc, isVideo = false) {
+    const modal = document.getElementById('mediaModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalVideo = document.getElementById('modalVideo');
+    
+    if (isVideo) {
+        // Mostrar vídeo iframe, esconder imagem
+        modalVideo.src = mediaSrc;
+        modalVideo.classList.remove('hidden');
+        modalImage.classList.add('hidden');
+    } else {
+        // Mostrar imagem, esconder vídeo
+        modalImage.src = mediaSrc;
+        modalImage.classList.remove('hidden');
+        modalVideo.classList.add('hidden');
+        modalVideo.src = ''; // Limpar iframe do vídeo
+    }
+    
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    const modal = document.getElementById('mediaModal');
+    const modalVideo = document.getElementById('modalVideo');
+    const modalImage = document.getElementById('modalImage');
+    
+    // Limpar iframe do vídeo
+    modalVideo.src = '';
+    modalImage.src = '';
+    
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = 'auto';
+}
+
+// Close modal on background click
+document.getElementById('mediaModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeModal();
+    }
+});
+
+// Close modal on escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeModal();
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+        <div class="text-center">
+            <h1 class="text-5xl lg:text-7xl font-bold text-gray-900 mb-6">
+                Bem-vindo ao
+                <span class="bg-gradient-to-r from-brand-600 to-blue-600 bg-clip-text text-transparent">
+                    FozCaribe
+                </span>
+            </h1>
+            <p class="text-xl lg:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Experimente a melhor plataforma de estilo de vida caribenho. Design moderno encontra o paraíso tropical.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/preregister" class="bg-brand-600 hover:bg-brand-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    <i class="fas fa-user-plus mr-2"></i>
+                    Pré-inscrever-me Agora
+                </a>
+                <a href="/gallery" class="bg-white hover:bg-gray-50 text-gray-700 border-2 border-gray-200 px-8 py-4 rounded-xl text-lg font-semibold transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    <i class="fas fa-images mr-2"></i>
+                    Ver Galeria
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Floating Elements -->
+    <div class="absolute top-20 left-10 w-20 h-20 bg-brand-500/20 rounded-full blur-xl animate-pulse"></div>
+    <div class="absolute top-40 right-20 w-32 h-32 bg-blue-500/20 rounded-full blur-xl animate-pulse" style="animation-delay: 2s;"></div>
+    <div class="absolute bottom-20 left-1/4 w-16 h-16 bg-purple-500/20 rounded-full blur-xl animate-pulse" style="animation-delay: 4s;"></div>
+</section>
+
+<!-- Features Section -->
+<section class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-bold text-gray-900 mb-4">Porquê Escolher o FozCaribe?</h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Descubra o que torna a nossa plataforma o destino principal para experiências caribenhas.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="group p-8 rounded-2xl bg-gradient-to-br from-brand-50 to-blue-50 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="w-16 h-16 bg-brand-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-rocket text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Experiência Moderna</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Design e tecnologia de ponta oferecem uma experiência de utilizador incomparável que define novos padrões.
+                </p>
+            </div>
+            
+            <div class="group p-8 rounded-2xl bg-gradient-to-br from-purple-50 to-pink-50 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="w-16 h-16 bg-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-users text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Comunidade em Primeiro</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Junte-se a uma comunidade vibrante de pessoas com interesses semelhantes, apaixonadas pela cultura e estilo de vida caribenho.
+                </p>
+            </div>
+            
+            <div class="group p-8 rounded-2xl bg-gradient-to-br from-green-50 to-emerald-50 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="w-16 h-16 bg-green-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                    <i class="fas fa-star text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Qualidade Premium</h3>
+                <p class="text-gray-600 leading-relaxed">
+                    Cada detalhe é criado com excelência em mente, garantindo que recebe apenas a melhor experiência possível.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-gradient-to-r from-brand-600 to-blue-600">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-4xl lg:text-5xl font-bold text-white mb-6">
+            Pronto para Começar a Sua Jornada?
+        </h2>
+        <p class="text-xl text-blue-100 mb-8 leading-relaxed">
+            Junte-se a milhares de utilizadores pioneiros que já estão a experimentar o futuro do estilo de vida caribenho.
+        </p>
+        <a href="/preregister" class="inline-block bg-white hover:bg-gray-100 text-brand-600 px-10 py-4 rounded-xl text-lg font-bold transition-all transform hover:scale-105 shadow-lg hover:shadow-xl">
+            <i class="fas fa-arrow-right mr-2"></i>
+            Começar a Sua Pré-inscrição
+        </a>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-8 text-center">
+            <div>
+                <div class="text-4xl font-bold text-brand-600 mb-2">71</div>
+                <div class="text-gray-600 font-medium">Alunos Totais em 2024/25</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-brand-600 mb-2">4</div>
+                <div class="text-gray-600 font-medium">Turmas em 2024/25</div>
+            </div>
+            <div>
+                <div class="text-4xl font-bold text-brand-600 mb-2">2</div>
+                <div class="text-gray-600 font-medium">Cidades em 2024/25</div>
+            </div>
+            <!-- <div>
+                <div class="text-4xl font-bold text-brand-600 mb-2">4</div>
+                <div class="text-gray-600 font-medium">Modalidades de Inscrição</div>
+            </div> -->
+            <div>
+                <div class="text-4xl font-bold text-brand-600 mb-2">100%</div>
+                <div class="text-gray-600 font-medium">Paixão pela Dança - Eterna</div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

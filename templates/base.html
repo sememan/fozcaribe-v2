@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FozCaribe - Experiência Moderna{% endblock %}</title>
+    
+    <!-- Modern CSS Framework - Tailwind via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand': {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-sans bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold bg-gradient-to-r from-brand-600 to-brand-500 bg-clip-text text-transparent">
+                        FozCaribe
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/" class="text-gray-700 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                            Início
+                        </a>
+                        <a href="/gallery" class="text-gray-700 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                            Galeria
+                        </a>
+                        <a href="/preregister" class="text-gray-700 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                            Pré-inscrição
+                        </a>
+                        <a href="/inscricao" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            <i class="fas fa-user-plus mr-2"></i>
+                            Inscrição
+                        </a>
+                        <a href="/login" class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            <i class="fas fa-sign-in-alt mr-2"></i>
+                            Login
+                        </a>
+                    </div>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button" class="mobile-menu-button text-gray-700 hover:text-brand-600 focus:outline-none focus:text-brand-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div class="mobile-menu hidden md:hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="/" class="text-gray-700 hover:text-brand-600 block px-3 py-2 rounded-md text-base font-medium">Início</a>
+                <a href="/gallery" class="text-gray-700 hover:text-brand-600 block px-3 py-2 rounded-md text-base font-medium">Galeria</a>
+                <a href="/preregister" class="text-gray-700 hover:text-brand-600 block px-3 py-2 rounded-md text-base font-medium">Pré-inscrição</a>
+                <a href="/inscricao" class="bg-brand-600 hover:bg-brand-700 text-white block px-3 py-2 rounded-md text-base font-medium">
+                    <i class="fas fa-user-plus mr-2"></i>Inscrição
+                </a>
+                <a href="/login" class="bg-gray-700 hover:bg-gray-800 text-white block px-3 py-2 rounded-md text-base font-medium">
+                    <i class="fas fa-sign-in-alt mr-2"></i>Login
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-2xl font-bold bg-gradient-to-r from-brand-400 to-brand-300 bg-clip-text text-transparent mb-4">
+                        FozCaribe
+                    </h3>
+                    <p class="text-gray-400">
+                        Experimente o futuro do estilo de vida caribenho com a nossa plataforma moderna.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Links Rápidos</h4>
+                    <ul class="space-y-2">
+                        <li><a href="/" class="text-gray-400 hover:text-white transition-colors">Início</a></li>
+                        <li><a href="/gallery" class="text-gray-400 hover:text-white transition-colors">Galeria</a></li>
+                        <li><a href="/preregister" class="text-gray-400 hover:text-white transition-colors">Pré-inscrição</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Conecte-se</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2025 FozCaribe. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

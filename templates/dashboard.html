@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - FozCaribe{% endblock %}
+
+{% block content %}
+<div class="min-h-screen py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                <i class="fas fa-tachometer-alt text-brand-600 mr-3"></i>
+                Dashboard
+            </h1>
+            <p class="text-xl text-gray-600">
+                Bem-vindo ao seu painel de controlo FozCaribe
+            </p>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+            <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-users text-brand-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Total Alunos</p>
+                        <p class="text-2xl font-bold text-gray-900">71</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-calendar text-purple-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Turmas Ativas</p>
+                        <p class="text-2xl font-bold text-gray-900">4</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-map-marker-alt text-green-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Cidades</p>
+                        <p class="text-2xl font-bold text-gray-900">2</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
+                <div class="flex items-center">
+                    <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-heart text-red-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Paixão</p>
+                        <p class="text-2xl font-bold text-gray-900">100%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+            <!-- Recent Activities -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                    <i class="fas fa-clock text-brand-600 mr-2"></i>
+                    Atividades Recentes
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-center p-4 bg-gray-50 rounded-xl">
+                        <div class="w-10 h-10 bg-brand-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-plus text-brand-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="font-semibold text-gray-900">Nova inscrição</p>
+                            <p class="text-sm text-gray-500">Maria Silva - Bachata Fundamentos</p>
+                        </div>
+                        <div class="ml-auto text-sm text-gray-500">2h atrás</div>
+                    </div>
+                    
+                    <div class="flex items-center p-4 bg-gray-50 rounded-xl">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-calendar-check text-green-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="font-semibold text-gray-900">Aula concluída</p>
+                            <p class="text-sm text-gray-500">Salsa - Turma Avançada</p>
+                        </div>
+                        <div class="ml-auto text-sm text-gray-500">1 dia atrás</div>
+                    </div>
+                    
+                    <div class="flex items-center p-4 bg-gray-50 rounded-xl">
+                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
+                            <i class="fas fa-images text-purple-600"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="font-semibold text-gray-900">Nova foto na galeria</p>
+                            <p class="text-sm text-gray-500">Evento Sunset Session</p>
+                        </div>
+                        <div class="ml-auto text-sm text-gray-500">3 dias atrás</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+                <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                    <i class="fas fa-lightning-bolt text-brand-600 mr-2"></i>
+                    Ações Rápidas
+                </h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <a href="/inscricao" class="block p-4 bg-brand-50 hover:bg-brand-100 rounded-xl transition-colors group">
+                        <div class="text-center">
+                            <i class="fas fa-user-plus text-brand-600 text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                            <p class="font-semibold text-gray-900">Nova Inscrição</p>
+                        </div>
+                    </a>
+                    
+                    <a href="/gallery" class="block p-4 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors group">
+                        <div class="text-center">
+                            <i class="fas fa-images text-purple-600 text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                            <p class="font-semibold text-gray-900">Galeria</p>
+                        </div>
+                    </a>
+                    
+                    <a href="/preregister" class="block p-4 bg-green-50 hover:bg-green-100 rounded-xl transition-colors group">
+                        <div class="text-center">
+                            <i class="fas fa-clipboard-list text-green-600 text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                            <p class="font-semibold text-gray-900">Pré-inscrições</p>
+                        </div>
+                    </a>
+                    
+                    <a href="/galeria/conteudo-login" class="block p-4 bg-yellow-50 hover:bg-yellow-100 rounded-xl transition-colors group">
+                        <div class="text-center">
+                            <i class="fas fa-lock text-yellow-600 text-2xl mb-2 group-hover:scale-110 transition-transform"></i>
+                            <p class="font-semibold text-gray-900">Conteúdo Exclusivo</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Classes -->
+        <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+            <h3 class="text-2xl font-bold text-gray-900 mb-6">
+                <i class="fas fa-calendar-alt text-brand-600 mr-2"></i>
+                Próximas Aulas
+            </h3>
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead>
+                        <tr class="border-b border-gray-200">
+                            <th class="text-left py-3 px-4 font-semibold text-gray-900">Modalidade</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-900">Data</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-900">Horário</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-900">Local</th>
+                            <th class="text-left py-3 px-4 font-semibold text-gray-900">Alunos</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-4 px-4">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-brand-100 text-brand-800">
+                                    Bachata Fundamentos
+                                </span>
+                            </td>
+                            <td class="py-4 px-4 text-gray-900">Segunda-feira</td>
+                            <td class="py-4 px-4 text-gray-600">20:00 - 21:00</td>
+                            <td class="py-4 px-4 text-gray-600">Foz do Arelho</td>
+                            <td class="py-4 px-4 text-gray-600">15 alunos</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-4 px-4">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-100 text-purple-800">
+                                    Bachata Intermédio
+                                </span>
+                            </td>
+                            <td class="py-4 px-4 text-gray-900">Terça-feira</td>
+                            <td class="py-4 px-4 text-gray-600">20:00 - 21:00</td>
+                            <td class="py-4 px-4 text-gray-600">Caldas da Rainha</td>
+                            <td class="py-4 px-4 text-gray-600">12 alunos</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="py-4 px-4">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                    Salsa
+                                </span>
+                            </td>
+                            <td class="py-4 px-4 text-gray-900">Quinta-feira</td>
+                            <td class="py-4 px-4 text-gray-600">19:30 - 20:30</td>
+                            <td class="py-4 px-4 text-gray-600">Foz do Arelho</td>
+                            <td class="py-4 px-4 text-gray-600">18 alunos</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

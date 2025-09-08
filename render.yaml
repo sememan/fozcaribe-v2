@@ -1,0 +1,42 @@
+# Render Configuration for FozCaribe v2.0
+# Arquivo de configuração para deploy no Render
+
+# Service Configuration
+services:
+  - type: web
+    name: fozcaribe-app
+    env: python
+    region: frankfurt  # Escolha a região mais próxima de Portugal
+    plan: free  # ou starter/standard dependendo das necessidades
+    buildCommand: "./build.sh"
+    startCommand: "uvicorn main:app --host=0.0.0.0 --port=$PORT"
+    
+    # Environment Variables
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.16
+      - key: GOOGLE_SHEETS_NAME
+        value: FozCaribe App
+      - key: APP_NAME
+        value: FozCaribe
+      - key: APP_VERSION
+        value: 2.0.0
+      - key: TIMEZONE
+        value: Europe/Lisbon
+      - key: LOG_LEVEL
+        value: INFO
+    
+    # Health Check
+    healthCheckPath: /
+    
+    # Auto Deploy
+    autoDeploy: true
+    
+    # Build settings
+    rootDir: .
+    
+# Database (se necessário no futuro)
+# databases:
+#   - name: fozcaribe-db
+#     databaseName: fozcaribe
+#     user: fozcaribe_user
