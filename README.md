@@ -80,7 +80,7 @@ Criar uma planilha Google Sheets com o nome **"FozCaribe App"** e as seguintes a
 Colunas: Timestamp | Nome | Telefone | Cidade | Nivel | Tipo_Inscricao | Estilo_Danca | Nota
 
 #### Aba "Inscricoes" 
-Colunas: Timestamp | Nome | Email | Telefone | Data_Nascimento | Morada | Cidade | Codigo_Postal | Modalidade | Experiencia | Tipo_Pagamento | Contacto_Emergencia_Nome | Contacto_Emergencia_Telefone | Observacoes
+Colunas: Timestamp | Nome | Tel | Cidade | Turma | Nascimento | Pessoas | Tipo_Mensalidade | Nota
 
 #### Aba "Users"
 Colunas: Nome | Email | Password

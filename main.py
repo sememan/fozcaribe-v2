@@ -170,46 +170,33 @@ async def inscricao_submit(request: Request):
         # Obter dados JSON do corpo da requisição
         data = await request.json()
         
-        # Extrair informações do formulário
+        # Extrair informações do formulário (seguindo o formato original fozcaribe.com)
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         nome = data.get('nome', '')
-        email = data.get('email', '')
-        telefone = data.get('telefone', '')
-        data_nascimento = data.get('data_nascimento', '')
-        morada = data.get('morada', '')
+        tel = data.get('tel', '')
         cidade = data.get('cidade', '')
-        codigo_postal = data.get('codigo_postal', '')
-        modalidade = data.get('modalidade', '')
-        experiencia = data.get('experiencia', '')
-        tipo_pagamento = data.get('tipo_pagamento', '')
-        contacto_emergencia_nome = data.get('contacto_emergencia_nome', '')
-        contacto_emergencia_telefone = data.get('contacto_emergencia_telefone', '')
-        observacoes = data.get('observacoes', '')
-        aceitar_termos = data.get('aceitar_termos', False)
+        turma = data.get('turma', '')
+        nascimento = data.get('nascimento', '')
+        pessoas = data.get('pessoas', '1')
+        tipo_mensalidade = data.get('tipo_mensalidade', '')
+        nota = data.get('nota', '')
         
         # Validações básicas
-        if not all([nome, email, telefone, data_nascimento, cidade, modalidade, tipo_pagamento]):
+        if not all([nome, tel, cidade, turma, nascimento, tipo_mensalidade]):
             return JSONResponse(
                 content={"success": False, "message": "Campos obrigatórios em falta"},
-                status_code=400
-            )
-        
-        if not aceitar_termos:
-            return JSONResponse(
-                content={"success": False, "message": "Deve aceitar os termos e condições"},
                 status_code=400
             )
         
         # Salvar no Google Sheets
         if GOOGLE_SHEETS_ENABLED and inscricao_sheet:
             inscricao_sheet.append_row([
-                timestamp, nome, email, telefone, data_nascimento, morada, 
-                cidade, codigo_postal, modalidade, experiencia, tipo_pagamento,
-                contacto_emergencia_nome, contacto_emergencia_telefone, observacoes
+                timestamp, nome, tel, cidade, turma, nascimento, 
+                pessoas, tipo_mensalidade, nota
             ])
             print(f"✅ Inscrição salva no Google Sheets: {nome} - {timestamp}")
         else:
-            print(f"📝 Google Sheets não disponível. Inscrição: {nome}, {email}")
+            print(f"📝 Google Sheets não disponível. Inscrição: {nome}, {tel}")
         
         return JSONResponse(content={"success": True, "message": "Inscrição submetida com sucesso"})
         
