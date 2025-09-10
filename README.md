@@ -125,6 +125,12 @@ fozcaribe.v2/
 │   ├── css/              # Estilos CSS personalizados
 │   ├── js/               # JavaScript
 │   └── images/           # Imagens do site
+├── render/               # Ficheiros de deploy do Render
+│   ├── DEPLOY_RENDER.md  # Guia completo de deploy
+│   ├── prepare_render.py # Script de validação pré-deploy
+│   ├── Procfile          # Configuração de processo
+│   ├── build.sh          # Script de build
+│   └── render.yaml       # Configuração do serviço
 └── venv/                 # Ambiente virtual (não incluído no Git)
 ```
 
@@ -157,6 +163,9 @@ fozcaribe.v2/
 - ✅ Fallback para links diretos
 
 ## 🚀 Deploy em Produção
+
+> 📁 **Todos os ficheiros de deploy estão organizados na pasta `render/`**  
+> Consulte `render/README.md` e `render/DEPLOY_RENDER.md` para instruções completas.
 
 ### 🌟 Opção 1: Render (Recomendado)
 

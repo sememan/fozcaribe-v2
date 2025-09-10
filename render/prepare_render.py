@@ -116,12 +116,7 @@ def generate_env_vars():
         'APP_VERSION': '2.0.0',
         'TIMEZONE': 'Europe/Lisbon',
         'LOG_LEVEL': 'INFO',
-        'FOLDER_ID_MAIN': '1769MEGbRjrUFu_HbplMDY0fh-9meEVuA',
-        'FOLDER_ID_BACHATA_INT': '1U2RM0P-_88KN8Eibs7WJkbf4hozKAqPZ',
-        'FOLDER_ID_BACHATA_FUND': '1Fb7drcC1HwvLQGqCWvd9bkV0NTv0nzw4',
-        'FOLDER_ID_SALSA': '1OuBDGBqvUKxvNWM2vdJxPG_DlwZ2zcWo',
-        'FOLDER_ID_SUNSET': '1gd64oEz09oFCh4VhqC09yfLSGAg4iJbB',
-        'FOLDER_ID_AULAS': '1kP8rVjVNBUaWYOcvEeCdI04q8NgB7Uy3'
+        'FOLDER_ID_MAIN': '1769MEGbRjrUFu_HbplMDY0fh-9meEVuA'
     }
     
     print("\n📝 Variáveis de ambiente para configurar no Render:")
