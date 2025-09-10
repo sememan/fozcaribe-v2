@@ -130,8 +130,22 @@ dmypy.json
 
 # FozCaribe specific files
 credentials.json
+service-account.json
+google-credentials.json
 data/
 *.log
+
+# Security - Additional patterns
+*.key
+*.pem
+*.p12
+*.pfx
+.env.example
+.env.local
+.env.production
+.env.development
+secrets.json
+config.json
 
 # OS specific files
 .DS_Store
