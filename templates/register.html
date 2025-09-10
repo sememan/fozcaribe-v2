@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registo Completo - FozCaribe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .form-floating {
+            position: relative;
+        }
+        .form-floating input, .form-floating select, .form-floating textarea {
+            height: 3.5rem;
+            line-height: 1.25;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem 0.75rem 0.25rem 0.75rem;
+            background-color: white;
+            transition: all 0.2s ease-in-out;
+        }
+        .form-floating label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            padding: 1rem 0.75rem;
+            pointer-events: none;
+            border: 1px solid transparent;
+            transform-origin: 0 0;
+            transition: all 0.1s ease-in-out;
+            color: #6b7280;
+        }
+        .form-floating input:focus, .form-floating select:focus, .form-floating textarea:focus {
+            outline: 0;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .form-floating input:not(:placeholder-shown), .form-floating select:not([value=""]), .form-floating textarea:not(:placeholder-shown) {
+            padding-top: 1.625rem;
+            padding-bottom: 0.625rem;
+        }
+        .form-floating input:focus ~ label, .form-floating input:not(:placeholder-shown) ~ label,
+        .form-floating select:focus ~ label, .form-floating select:not([value=""]) ~ label,
+        .form-floating textarea:focus ~ label, .form-floating textarea:not(:placeholder-shown) ~ label {
+            opacity: 0.65;
+            transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+            color: #667eea;
+        }
+        .floating-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg">
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-sm shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <i class="fas fa-music text-2xl text-indigo-600"></i>
+                        <span class="text-xl font-bold text-gray-800">FozCaribe</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-700 hover:text-indigo-600 transition-colors">Início</a>
+                    <a href="/preregister" class="text-gray-700 hover:text-indigo-600 transition-colors">Pré-registo</a>
+                    <a href="/galeria" class="text-gray-700 hover:text-indigo-600 transition-colors">Galeria</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="pt-20 pb-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <div class="floating-animation mb-6">
+                    <i class="fas fa-user-plus text-6xl text-white/80"></i>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                    Registo Completo
+                </h1>
+                <p class="text-xl text-white/80 max-w-2xl mx-auto">
+                    Complete o seu registo na FozCaribe e junte-se à nossa família de dança!
+                </p>
+            </div>
+
+            <!-- Registration Form -->
+            <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-10">
+                {% if error %}
+                <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg">
+                    <div class="flex">
+                        <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                        <p class="text-red-700">{{ error }}</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <form action="/register" method="post" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Nome -->
+                        <div class="form-floating">
+                            <input type="text" id="nome" name="nome" placeholder=" " required
+                                   class="w-full">
+                            <label for="nome">Nome Completo *</label>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-floating">
+                            <input type="email" id="email" name="email" placeholder=" " required
+                                   class="w-full">
+                            <label for="email">Email *</label>
+                        </div>
+
+                        <!-- Telefone -->
+                        <div class="form-floating">
+                            <input type="tel" id="telefone" name="telefone" placeholder=" " required
+                                   class="w-full">
+                            <label for="telefone">Telefone *</label>
+                        </div>
+
+                        <!-- Idade -->
+                        <div class="form-floating">
+                            <input type="number" id="idade" name="idade" placeholder=" " required min="16" max="99"
+                                   class="w-full">
+                            <label for="idade">Idade *</label>
+                        </div>
+                    </div>
+
+                    <!-- Experiência em Dança -->
+                    <div class="form-floating">
+                        <select id="experiencia_danca" name="experiencia_danca" required class="w-full">
+                            <option value="">Selecione...</option>
+                            <option value="Iniciante">Iniciante</option>
+                            <option value="Básico">Básico</option>
+                            <option value="Intermédio">Intermédio</option>
+                            <option value="Avançado">Avançado</option>
+                        </select>
+                        <label for="experiencia_danca">Experiência em Dança *</label>
+                    </div>
+
+                    <!-- Objetivo -->
+                    <div class="form-floating">
+                        <select id="objetivo" name="objetivo" required class="w-full">
+                            <option value="">Selecione...</option>
+                            <option value="Hobby/Diversão">Hobby/Diversão</option>
+                            <option value="Exercício Físico">Exercício Físico</option>
+                            <option value="Competição">Competição</option>
+                            <option value="Performance">Performance</option>
+                            <option value="Desenvolvimento Pessoal">Desenvolvimento Pessoal</option>
+                        </select>
+                        <label for="objetivo">Objetivo Principal *</label>
+                    </div>
+
+                    <!-- Disponibilidade -->
+                    <div class="form-floating">
+                        <select id="disponibilidade" name="disponibilidade" required class="w-full">
+                            <option value="">Selecione...</option>
+                            <option value="Segunda-feira">Segunda-feira</option>
+                            <option value="Terça-feira">Terça-feira</option>
+                            <option value="Quarta-feira">Quarta-feira</option>
+                            <option value="Quinta-feira">Quinta-feira</option>
+                            <option value="Sexta-feira">Sexta-feira</option>
+                            <option value="Sábado">Sábado</option>
+                            <option value="Domingo">Domingo</option>
+                            <option value="Flexível">Flexível</option>
+                        </select>
+                        <label for="disponibilidade">Disponibilidade Preferencial *</label>
+                    </div>
+
+                    <!-- Nota (Opcional) -->
+                    <div class="form-floating">
+                        <textarea id="nota" name="nota" placeholder=" " rows="4" class="w-full resize-none"></textarea>
+                        <label for="nota">Notas/Comentários (Opcional)</label>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-4">
+                        <button type="submit" 
+                                class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-4 px-6 rounded-xl hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl">
+                            <i class="fas fa-user-check mr-2"></i>
+                            Completar Registo
+                        </button>
+                    </div>
+
+                    <!-- Back Link -->
+                    <div class="text-center pt-4">
+                        <a href="/preregister" class="text-indigo-600 hover:text-indigo-800 transition-colors">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Voltar ao Pré-registo
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+                <div class="bg-white/90 backdrop-blur-sm rounded-xl p-6 text-center shadow-lg">
+                    <i class="fas fa-heart text-3xl text-red-500 mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Paixão</h3>
+                    <p class="text-gray-600">Descubra a sua paixão pela dança caribenha</p>
+                </div>
+                <div class="bg-white/90 backdrop-blur-sm rounded-xl p-6 text-center shadow-lg">
+                    <i class="fas fa-users text-3xl text-blue-500 mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Comunidade</h3>
+                    <p class="text-gray-600">Junte-se a uma comunidade vibrante e acolhedora</p>
+                </div>
+                <div class="bg-white/90 backdrop-blur-sm rounded-xl p-6 text-center shadow-lg">
+                    <i class="fas fa-star text-3xl text-yellow-500 mb-4"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Excelência</h3>
+                    <p class="text-gray-600">Aprenda com os melhores professores</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form enhancement
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const submitButton = form.querySelector('button[type="submit"]');
+            
+            form.addEventListener('submit', function() {
+                submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processando...';
+                submitButton.disabled = true;
+            });
+
+            // Auto-focus first input
+            document.getElementById('nome').focus();
+        });
+    </script>
+</body>
+</html>

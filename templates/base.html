@@ -3,7 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}FozCaribe - Experiência Moderna{% endblock %}</title>
+    <title>{% block title %}FozCaribe - Escola de Dança Latina em Foz do Iguaçu{% endblock %}</title>
+    
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID', {
+            page_title: document.title,
+            page_location: window.location.href
+        });
+        
+        // Custom event tracking function
+        function trackEvent(action, category, label, value) {
+            gtag('event', action, {
+                event_category: category,
+                event_label: label,
+                value: value
+            });
+        }
+        
+        // Track form conversions
+        function trackConversion(conversion_type, form_name) {
+            gtag('event', 'conversion', {
+                event_category: 'form_submission',
+                event_label: form_name,
+                conversion_type: conversion_type
+            });
+        }
+    </script>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block description %}Escola de dança latina em Foz do Iguaçu. Aprenda Salsa, Bachata e muito mais com instrutores profissionais. Aulas para todos os níveis.{% endblock %}">
+    <meta name="keywords" content="dança latina, salsa, bachata, Foz do Iguaçu, escola de dança, aulas de dança, dance classes">
+    <meta name="author" content="FozCaribe">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% block canonical %}https://fozcaribe.com/{% endblock %}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{% block og_url %}https://fozcaribe.com/{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}FozCaribe - Escola de Dança Latina{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Aprenda dança latina em Foz do Iguaçu com os melhores instrutores. Salsa, Bachata e muito mais!{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://fozcaribe.com/static/images/fozcaribe-og.jpg{% endblock %}">
+    <meta property="og:site_name" content="FozCaribe">
+    <meta property="og:locale" content="pt_BR">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{% block twitter_url %}https://fozcaribe.com/{% endblock %}">
+    <meta property="twitter:title" content="{% block twitter_title %}FozCaribe - Escola de Dança Latina{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}Aprenda dança latina em Foz do Iguaçu com os melhores instrutores{% endblock %}">
+    <meta property="twitter:image" content="{% block twitter_image %}https://fozcaribe.com/static/images/fozcaribe-og.jpg{% endblock %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicon-16x16.png">
     
     <!-- Modern CSS Framework - Tailwind via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -16,6 +75,28 @@
     
     <!-- Custom styles -->
     <link rel="stylesheet" href="/static/css/style.css">
+    
+    <!-- Structured Data for Local Business -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "DanceGroup",
+        "name": "FozCaribe",
+        "image": "https://fozcaribe.com/static/images/fozcaribe-logo.jpg",
+        "description": "Escola de dança latina em Foz do Iguaçu especializada em Salsa, Bachata e danças caribenhas",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Foz do Iguaçu",
+            "addressRegion": "PR",
+            "addressCountry": "BR"
+        },
+        "url": "https://fozcaribe.com",
+        "sameAs": [
+            "https://instagram.com/fozcaribe",
+            "https://facebook.com/fozcaribe"
+        ]
+    }
+    </script>
     
     <script>
         tailwind.config = {
@@ -39,18 +120,23 @@
     </script>
 </head>
 <body class="font-sans bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen">
+    <!-- Skip to content link -->
+    <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-brand-600 text-white px-4 py-2 rounded z-50">
+        Saltar para o conteúdo principal
+    </a>
+
     <!-- Navigation -->
-    <nav class="bg-white/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
+    <nav class="bg-white/80 backdrop-blur-md shadow-lg sticky top-0 z-50" role="navigation" aria-label="Navegação principal">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <a href="/" class="text-2xl font-bold bg-gradient-to-r from-brand-600 to-brand-500 bg-clip-text text-transparent">
+                    <a href="/" class="text-2xl font-bold bg-gradient-to-r from-brand-600 to-brand-500 bg-clip-text text-transparent" aria-label="FozCaribe - Página inicial">
                         FozCaribe
                     </a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="/" class="text-gray-700 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        <a href="/" class="text-gray-700 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium transition-colors" aria-current="page">
                             Início
                         </a>
                         <a href="/gallery" class="text-gray-700 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
@@ -59,31 +145,37 @@
                         <a href="/preregister" class="text-gray-700 hover:text-brand-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
                             Pré-inscrição
                         </a>
-                        <a href="/inscricao" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            <i class="fas fa-user-plus mr-2"></i>
+                        <a href="/register" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors" aria-label="Inscrição completa">
+                            <i class="fas fa-user-plus mr-2" aria-hidden="true"></i>
                             Inscrição
                         </a>
-                        <a href="/login" class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            <i class="fas fa-sign-in-alt mr-2"></i>
+                        <a href="/login" class="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors" aria-label="Entrar na conta">
+                            <i class="fas fa-sign-in-alt mr-2" aria-hidden="true"></i>
                             Login
                         </a>
                     </div>
                 </div>
                 <!-- Mobile menu button -->
                 <div class="md:hidden">
-                    <button type="button" class="mobile-menu-button text-gray-700 hover:text-brand-600 focus:outline-none focus:text-brand-600">
-                        <i class="fas fa-bars text-xl"></i>
+                    <button 
+                        type="button" 
+                        class="mobile-menu-button text-gray-700 hover:text-brand-600 focus:outline-none focus:text-brand-600 focus:ring-2 focus:ring-brand-500 rounded p-2"
+                        aria-controls="mobile-menu"
+                        aria-expanded="false"
+                        aria-label="Abrir menu de navegação"
+                    >
+                        <i class="fas fa-bars text-xl" aria-hidden="true"></i>
                     </button>
                 </div>
             </div>
         </div>
         <!-- Mobile menu -->
-        <div class="mobile-menu hidden md:hidden bg-white border-t">
+        <div class="mobile-menu hidden md:hidden bg-white border-t" id="mobile-menu" role="menu" aria-orientation="vertical">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="/" class="text-gray-700 hover:text-brand-600 block px-3 py-2 rounded-md text-base font-medium">Início</a>
-                <a href="/gallery" class="text-gray-700 hover:text-brand-600 block px-3 py-2 rounded-md text-base font-medium">Galeria</a>
+                <a href="/" class="text-gray-700 hover:text-brand-600 block px-3 py-2 rounded-md text-base font-medium" role="menuitem">Início</a>
+                <a href="/gallery" class="text-gray-700 hover:text-brand-600 block px-3 py-2 rounded-md text-base font-medium" role="menuitem">Galeria</a>
                 <a href="/preregister" class="text-gray-700 hover:text-brand-600 block px-3 py-2 rounded-md text-base font-medium">Pré-inscrição</a>
-                <a href="/inscricao" class="bg-brand-600 hover:bg-brand-700 text-white block px-3 py-2 rounded-md text-base font-medium">
+                <a href="/register" class="bg-brand-600 hover:bg-brand-700 text-white block px-3 py-2 rounded-md text-base font-medium">
                     <i class="fas fa-user-plus mr-2"></i>Inscrição
                 </a>
                 <a href="/login" class="bg-gray-700 hover:bg-gray-800 text-white block px-3 py-2 rounded-md text-base font-medium">
@@ -93,8 +185,8 @@
         </div>
     </nav>
 
-    <!-- Main content -->
-    <main>
+    <!-- Main Content -->
+    <main id="main" role="main" aria-label="Conteúdo principal">
         {% block content %}{% endblock %}
     </main>
 
@@ -140,6 +232,111 @@
     </footer>
 
     <!-- JavaScript -->
+    <script>
+        // Mobile menu functionality with accessibility
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const menuLinks = mobileMenu.querySelectorAll('a');
+            
+            let isMenuOpen = false;
+
+            function toggleMenu() {
+                isMenuOpen = !isMenuOpen;
+                
+                if (isMenuOpen) {
+                    mobileMenu.classList.remove('hidden');
+                    mobileMenuButton.setAttribute('aria-expanded', 'true');
+                    mobileMenuButton.setAttribute('aria-label', 'Fechar menu de navegação');
+                    mobileMenuButton.querySelector('i').classList.replace('fa-bars', 'fa-times');
+                    
+                    // Focus first menu item
+                    menuLinks[0]?.focus();
+                } else {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuButton.setAttribute('aria-expanded', 'false');
+                    mobileMenuButton.setAttribute('aria-label', 'Abrir menu de navegação');
+                    mobileMenuButton.querySelector('i').classList.replace('fa-times', 'fa-bars');
+                    
+                    // Return focus to button
+                    mobileMenuButton.focus();
+                }
+            }
+
+            // Toggle menu on button click
+            mobileMenuButton.addEventListener('click', toggleMenu);
+
+            // Close menu on link click
+            menuLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (isMenuOpen) {
+                        toggleMenu();
+                    }
+                });
+            });
+
+            // Close menu on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && isMenuOpen) {
+                    toggleMenu();
+                }
+            });
+
+            // Trap focus within mobile menu when open
+            document.addEventListener('keydown', function(e) {
+                if (!isMenuOpen || e.key !== 'Tab') return;
+
+                const focusableElements = [mobileMenuButton, ...menuLinks];
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+
+                if (e.shiftKey) {
+                    if (document.activeElement === firstElement) {
+                        lastElement.focus();
+                        e.preventDefault();
+                    }
+                } else {
+                    if (document.activeElement === lastElement) {
+                        firstElement.focus();
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+
+        // Add global styles for accessibility
+        const style = document.createElement('style');
+        style.textContent = `
+            .sr-only {
+                position: absolute;
+                width: 1px;
+                height: 1px;
+                padding: 0;
+                margin: -1px;
+                overflow: hidden;
+                clip: rect(0, 0, 0, 0);
+                white-space: nowrap;
+                border: 0;
+            }
+            
+            .focus\\:not-sr-only:focus {
+                position: static;
+                width: auto;
+                height: auto;
+                padding: 0.5rem 1rem;
+                margin: 0;
+                overflow: visible;
+                clip: auto;
+                white-space: normal;
+            }
+            
+            *:focus {
+                outline: 2px solid #0284c7;
+                outline-offset: 2px;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
     <script src="/static/js/main.js"></script>
 </body>
 </html>

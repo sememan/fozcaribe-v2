@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página Não Encontrada - FozCaribe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand': {
+                            50: '#fef7ee',
+                            100: '#fdedd7',
+                            200: '#fad7ae',
+                            300: '#f6ba7a',
+                            400: '#f19344',
+                            500: '#ed751f',
+                            600: '#de5a15',
+                            700: '#b84414',
+                            800: '#933617',
+                            900: '#772d16',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+    <div class="max-w-md mx-auto text-center px-4">
+        <div class="mb-8">
+            <div class="text-8xl font-bold text-brand-500 mb-4">404</div>
+            <h1 class="text-2xl font-bold text-gray-800 mb-2">Página Não Encontrada</h1>
+            <p class="text-gray-600 mb-8">
+                Desculpe, a página que procura não existe ou foi movida.
+            </p>
+        </div>
+        
+        <div class="space-y-4">
+            <a href="/" 
+               class="inline-block bg-brand-600 hover:bg-brand-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                Voltar ao Início
+            </a>
+            <div class="flex flex-col sm:flex-row gap-2 justify-center">
+                <a href="/preregister" class="text-brand-600 hover:text-brand-700 underline">
+                    Pré-inscrição
+                </a>
+                <span class="hidden sm:inline text-gray-400">•</span>
+                <a href="/register" class="text-brand-600 hover:text-brand-700 underline">
+                    Inscrição Completa
+                </a>
+                <span class="hidden sm:inline text-gray-400">•</span>
+                <a href="/gallery" class="text-brand-600 hover:text-brand-700 underline">
+                    Galeria
+                </a>
+            </div>
+        </div>
+        
+        <div class="mt-12 text-sm text-gray-500">
+            <p>Se continuar com problemas, entre em contacto connosco.</p>
+        </div>
+    </div>
+</body>
+</html>

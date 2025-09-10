@@ -75,7 +75,23 @@
                     </h2>
                     <p class="text-center text-gray-600 mb-8">Terça 23 e 30 Setembro</p>
 
-                    <form method="post" class="space-y-6">
+                    <form method="post" class="space-y-6" id="preregisterForm">
+                        <!-- Error/Success Messages -->
+                        <div id="form-messages" class="hidden">
+                            <div id="error-message" class="hidden p-4 bg-red-50 border-l-4 border-red-500 rounded-r-lg mb-4">
+                                <div class="flex">
+                                    <i class="fas fa-exclamation-circle text-red-500 mt-1 mr-3"></i>
+                                    <p class="text-red-700" id="error-text"></p>
+                                </div>
+                            </div>
+                            <div id="success-message" class="hidden p-4 bg-green-50 border-l-4 border-green-500 rounded-r-lg mb-4">
+                                <div class="flex">
+                                    <i class="fas fa-check-circle text-green-500 mt-1 mr-3"></i>
+                                    <p class="text-green-700" id="success-text"></p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div>
                             <label for="name" class="block text-sm font-semibold text-gray-700 mb-3">
                                 <i class="fas fa-user text-brand-600 mr-2"></i>
@@ -86,9 +102,14 @@
                                 id="name" 
                                 name="name" 
                                 required
+                                aria-describedby="name-error"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-gray-900 placeholder-gray-500"
                                 placeholder="Ex: João Silva"
                             >
+                            <div id="name-error" class="hidden text-red-500 text-sm mt-1">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                <span></span>
+                            </div>
                         </div>
 
                         <div>
@@ -101,9 +122,14 @@
                                 id="phone" 
                                 name="phone"
                                 required
+                                aria-describedby="phone-error"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-colors text-gray-900 placeholder-gray-500"
                                 placeholder="+351 912 345 678"
                             >
+                            <div id="phone-error" class="hidden text-red-500 text-sm mt-1">
+                                <i class="fas fa-exclamation-triangle mr-1"></i>
+                                <span></span>
+                            </div>
                         </div>
 
                         <div>
@@ -207,11 +233,20 @@
                         <div class="pt-4">
                             <button 
                                 type="submit"
-                                class="w-full bg-gradient-to-r from-brand-600 to-blue-600 hover:from-brand-700 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-brand-300"
+                                id="submit-btn"
+                                aria-describedby="submit-status"
+                                class="w-full bg-gradient-to-r from-brand-600 to-blue-600 hover:from-brand-700 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all transform hover:scale-105 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-brand-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                             >
-                                <i class="fas fa-check mr-2"></i>
-                                Registar para Aulas Gratuitas
+                                <span id="submit-text">
+                                    <i class="fas fa-check mr-2"></i>
+                                    Registar para Aulas Gratuitas
+                                </span>
+                                <span id="loading-text" class="hidden">
+                                    <i class="fas fa-spinner fa-spin mr-2"></i>
+                                    A processar...
+                                </span>
                             </button>
+                            <div id="submit-status" class="sr-only" aria-live="polite"></div>
                         </div>
                     </form>
                 </div>
@@ -233,4 +268,174 @@
         </div>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('preregisterForm');
+    const submitBtn = document.getElementById('submit-btn');
+    const submitText = document.getElementById('submit-text');
+    const loadingText = document.getElementById('loading-text');
+    const submitStatus = document.getElementById('submit-status');
+    const formMessages = document.getElementById('form-messages');
+    const errorMessage = document.getElementById('error-message');
+    const successMessage = document.getElementById('success-message');
+    const errorText = document.getElementById('error-text');
+    const successText = document.getElementById('success-text');
+
+    // Form validation functions
+    function validateField(field, errorElement, validationRules) {
+        const value = field.value.trim();
+        let isValid = true;
+        let errorMsg = '';
+
+        for (const rule of validationRules) {
+            if (!rule.test(value)) {
+                isValid = false;
+                errorMsg = rule.message;
+                break;
+            }
+        }
+
+        if (isValid) {
+            field.classList.remove('border-red-500');
+            field.classList.add('border-green-500');
+            errorElement.classList.add('hidden');
+            field.setAttribute('aria-invalid', 'false');
+        } else {
+            field.classList.remove('border-green-500');
+            field.classList.add('border-red-500');
+            errorElement.querySelector('span').textContent = errorMsg;
+            errorElement.classList.remove('hidden');
+            field.setAttribute('aria-invalid', 'true');
+        }
+
+        return isValid;
+    }
+
+    // Validation rules
+    const validationRules = {
+        name: [
+            { test: (val) => val.length >= 2, message: 'Nome deve ter pelo menos 2 caracteres' },
+            { test: (val) => val.length <= 100, message: 'Nome muito longo' }
+        ],
+        phone: [
+            { test: (val) => val.length >= 9, message: 'Número de telefone inválido' },
+            { test: (val) => /^[\+]?[0-9\s\-\(\)]+$/.test(val), message: 'Formato de telefone inválido' }
+        ],
+        email: [
+            { test: (val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), message: 'Email inválido' }
+        ],
+        city: [
+            { test: (val) => val.length >= 2, message: 'Cidade deve ter pelo menos 2 caracteres' }
+        ]
+    };
+
+    // Add real-time validation
+    Object.keys(validationRules).forEach(fieldName => {
+        const field = document.getElementById(fieldName);
+        const errorElement = document.getElementById(`${fieldName}-error`);
+        
+        if (field && errorElement) {
+            field.addEventListener('blur', () => {
+                validateField(field, errorElement, validationRules[fieldName]);
+            });
+            
+            field.addEventListener('input', () => {
+                if (field.classList.contains('border-red-500')) {
+                    validateField(field, errorElement, validationRules[fieldName]);
+                }
+            });
+        }
+    });
+
+    // Form submission with loading state
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        // Validate all fields
+        let isFormValid = true;
+        Object.keys(validationRules).forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            const errorElement = document.getElementById(`${fieldName}-error`);
+            
+            if (field && errorElement) {
+                const isFieldValid = validateField(field, errorElement, validationRules[fieldName]);
+                if (!isFieldValid) isFormValid = false;
+            }
+        });
+
+        if (!isFormValid) {
+            showMessage('Por favor, corrija os erros no formulário', 'error');
+            return;
+        }
+
+        // Show loading state
+        submitBtn.disabled = true;
+        submitText.classList.add('hidden');
+        loadingText.classList.remove('hidden');
+        submitStatus.textContent = 'A processar inscrição...';
+
+        try {
+            // Submit form data
+            const formData = new FormData(form);
+            const response = await fetch('/preregister', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                showMessage('Pré-inscrição realizada com sucesso! Receberá confirmação em breve.', 'success');
+                
+                // Track conversion
+                if (typeof trackConversion === 'function') {
+                    trackConversion('preregistration', 'preregister_form');
+                }
+                
+                form.reset();
+                // Reset field styles
+                Object.keys(validationRules).forEach(fieldName => {
+                    const field = document.getElementById(fieldName);
+                    if (field) {
+                        field.classList.remove('border-green-500', 'border-red-500');
+                    }
+                });
+            } else {
+                throw new Error('Erro no servidor');
+            }
+        } catch (error) {
+            showMessage('Erro ao enviar formulário. Tente novamente mais tarde.', 'error');
+        } finally {
+            // Reset loading state
+            submitBtn.disabled = false;
+            submitText.classList.remove('hidden');
+            loadingText.classList.add('hidden');
+            submitStatus.textContent = '';
+        }
+    });
+
+    function showMessage(message, type) {
+        formMessages.classList.remove('hidden');
+        
+        if (type === 'error') {
+            errorText.textContent = message;
+            errorMessage.classList.remove('hidden');
+            successMessage.classList.add('hidden');
+        } else {
+            successText.textContent = message;
+            successMessage.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+        }
+
+        // Scroll to message
+        formMessages.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        
+        // Auto-hide success messages after 5 seconds
+        if (type === 'success') {
+            setTimeout(() => {
+                formMessages.classList.add('hidden');
+            }, 5000);
+        }
+    }
+});
+</script>
 {% endblock %}

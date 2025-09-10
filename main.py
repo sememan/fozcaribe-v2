@@ -2,9 +2,21 @@ from fastapi import FastAPI, Request, Form, File, UploadFile, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from fastapi.exception_handlers import (
+    http_exception_handler,
+    request_validation_exception_handler,
+)
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
 from typing import List
 import os
 import json
+import bleach
+import re
 from datetime import datetime
 import gspread
 from google.oauth2.service_account import Credentials
@@ -12,13 +24,66 @@ from googleapiclient.discovery import build
 import io
 
 
+# Rate limiting setup
+limiter = Limiter(key_func=get_remote_address)
 app = FastAPI(title="FozCaribe - Modern Web App", version="2.0.0")
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+app.add_middleware(SlowAPIMiddleware)
+
+# Security: Input sanitization functions
+def sanitize_text_input(text: str, max_length: int = 200) -> str:
+    """Sanitize text input to prevent XSS and limit length"""
+    if not text:
+        return ""
+    
+    # Remove HTML tags and limit length
+    sanitized = bleach.clean(text.strip(), tags=[], strip=True)
+    return sanitized[:max_length]
+
+def sanitize_phone(phone: str) -> str:
+    """Sanitize phone number - only digits, spaces, +, -, ()"""
+    if not phone:
+        return ""
+    
+    # Allow only phone-related characters
+    return re.sub(r'[^0-9\+\-\(\)\s]', '', phone.strip())[:20]
+
+def sanitize_email(email: str) -> str:
+    """Basic email sanitization"""
+    if not email:
+        return ""
+    
+    email = email.strip().lower()
+    # Basic email validation
+    if '@' in email and '.' in email.split('@')[1]:
+        return email[:100]
+    return ""
 
 # Mount static files
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Templates
 templates = Jinja2Templates(directory="templates")
+
+# Error handlers
+@app.exception_handler(StarletteHTTPException)
+async def custom_http_exception_handler(request: Request, exc: StarletteHTTPException):
+    if exc.status_code == 404:
+        return templates.TemplateResponse("404.html", {"request": request}, status_code=404)
+    elif exc.status_code == 500:
+        return templates.TemplateResponse("500.html", {"request": request}, status_code=500)
+    else:
+        return await http_exception_handler(request, exc)
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return templates.TemplateResponse("500.html", {"request": request}, status_code=400)
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    print(f"❌ Unhandled exception: {exc}")
+    return templates.TemplateResponse("500.html", {"request": request}, status_code=500)
 
 # Create directories if they don't exist
 os.makedirs("static/css", exist_ok=True)
@@ -35,50 +100,52 @@ FOLDER_ID = '1769MEGbRjrUFu_HbplMDY0fh-9meEVuA'
 
 def get_drive_files(folder_id=None):
     """Busca arquivos de uma pasta específica do Google Drive"""
-    if not GOOGLE_SHEETS_ENABLED or not drive_service:
-        return []
-    
     try:
-        folder_id = folder_id or FOLDER_ID
-        query = f"'{folder_id}' in parents and (mimeType contains 'image/' or mimeType contains 'video/')"
-        
-        results = drive_service.files().list(
-            q=query,
-            fields="nextPageToken, files(id, name, mimeType, webViewLink, webContentLink)"
-        ).execute()
-        
-        items = results.get('files', [])
-        
-        media_files = []
-        for item in items:
-            file_id = item['id']
-            is_video = 'video' in item['mimeType']
+        # Tentar usar o drive_service se disponível
+        if 'drive_service' in globals() and drive_service:
+            folder_id = folder_id or FOLDER_ID
+            query = f"'{folder_id}' in parents and (mimeType contains 'image/' or mimeType contains 'video/')"
             
-            if is_video:
-                # Para vídeos, usar embed URL do Google Drive
-                download_url = f"https://drive.google.com/file/d/{file_id}/preview"
-                thumbnail_url = f"https://drive.google.com/thumbnail?id={file_id}&sz=w400"
-            else:
-                # Para imagens, usar nosso proxy local
-                download_url = f"/drive-image/{file_id}"
-                thumbnail_url = f"/drive-image/{file_id}"
+            results = drive_service.files().list(
+                q=query,
+                fields="nextPageToken, files(id, name, mimeType, webViewLink, webContentLink)"
+            ).execute()
             
-            media_files.append({
-                'id': item['id'],
-                'name': item['name'],
-                'mimeType': item['mimeType'],
-                'webViewLink': item['webViewLink'],
-                'downloadLink': download_url,
-                'thumbnail_url': thumbnail_url,
-                'isVideo': is_video,
-                'isImage': 'image' in item['mimeType']
-            })
-        
-        print(f"✅ Encontrados {len(media_files)} arquivos na pasta {folder_id}")
-        if media_files:
-            example = media_files[0]
-            print(f"🔗 URL de exemplo ({example['mimeType']}): {example['downloadLink']}")
-        return media_files
+            items = results.get('files', [])
+            
+            media_files = []
+            for item in items:
+                file_id = item['id']
+                is_video = 'video' in item['mimeType']
+                
+                if is_video:
+                    # Para vídeos, usar embed URL do Google Drive
+                    download_url = f"https://drive.google.com/file/d/{file_id}/preview"
+                    thumbnail_url = f"https://drive.google.com/thumbnail?id={file_id}&sz=w400"
+                else:
+                    # Para imagens, usar nosso proxy local
+                    download_url = f"/drive-image/{file_id}"
+                    thumbnail_url = f"/drive-image/{file_id}"
+                
+                media_files.append({
+                    'id': item['id'],
+                    'name': item['name'],
+                    'mimeType': item['mimeType'],
+                    'webViewLink': item['webViewLink'],
+                    'downloadLink': download_url,
+                    'thumbnail_url': thumbnail_url,
+                    'isVideo': is_video,
+                    'isImage': 'image' in item['mimeType']
+                })
+            
+            print(f"✅ Encontrados {len(media_files)} arquivos na pasta {folder_id}")
+            if media_files:
+                example = media_files[0]
+                print(f"🔗 URL de exemplo ({example['mimeType']}): {example['downloadLink']}")
+            return media_files
+        else:
+            print("⚠️  Google Drive não disponível - usando galeria local")
+            return []
     except Exception as e:
         print(f"Erro ao buscar arquivos do Drive: {e}")
         return []
@@ -95,18 +162,39 @@ try:
     client = gspread.authorize(credentials)
     drive_service = build("drive", "v3", credentials=credentials)
     
-    # Apre i fogli "Registrations" e "Attendance"
-    preregistration_sheet = client.open("FozCaribe App").worksheet("Preregistrations")
-    inscricao_sheet = client.open("FozCaribe App").worksheet("Inscricoes")
-    users_sheet = client.open("FozCaribe App").worksheet("Users")
+    # Tentar abrir as planilhas (criar se não existirem)
+    spreadsheet = client.open("FozCaribe App")
+
+    # Verificar e criar planilhas necessárias
+    try:
+        registration_sheet = spreadsheet.worksheet("Registrations")
+    except gspread.WorksheetNotFound:
+        registration_sheet = spreadsheet.add_worksheet("Registrations", rows=1000, cols=10)
+        # Adicionar cabeçalhos para registro completo
+        registration_sheet.append_row(['Timestamp', 'Nome', 'Email', 'Telefone', 'Idade', 'Experiencia_danca', 'Objetivo', 'Disponibilidade', 'Nota'])
+
+    try:
+        preregistration_sheet = spreadsheet.worksheet("Preregistrations")
+    except gspread.WorksheetNotFound:
+        preregistration_sheet = spreadsheet.add_worksheet("Preregistrations", rows=1000, cols=10)
+        # Adicionar cabeçalhos
+        preregistration_sheet.append_row(['Nome', 'Email', 'Telefone', 'Idade', 'Experiencia', 'Timestamp'])
+    
+    try:
+        users_sheet = spreadsheet.worksheet("Users")
+    except gspread.WorksheetNotFound:
+        users_sheet = spreadsheet.add_worksheet("Users", rows=1000, cols=10)
+        # Adicionar cabeçalhos
+        users_sheet.append_row(['Nome', 'Email', 'Telefone', 'Timestamp'])
     
     print("✅ Google Sheets conectado com sucesso!")
+    print(f"📊 Planilhas disponíveis: Registrations, Preregistrations, Users")
     GOOGLE_SHEETS_ENABLED = True
 except Exception as e:
     print(f"⚠️  Google Sheets não conectado: {e}")
     print("📝 A aplicação funcionará sem Google Sheets")
+    registration_sheet = None
     preregistration_sheet = None
-    inscricao_sheet = None
     users_sheet = None
     GOOGLE_SHEETS_ENABLED = False
 
@@ -115,6 +203,7 @@ async def preregister_page(request: Request):
     return templates.TemplateResponse("preregister.html", {"request": request})
 
 @app.post("/preregister")
+@limiter.limit("5/minute")
 async def preregister(
     request: Request,
     name: str = Form(...),
@@ -126,21 +215,26 @@ async def preregister(
     dance_style: str = Form(...),  # Novo campo
     message: str = Form(None)  # Default empty if not provided
 ):
-    # Converter para os nomes usados no Google Sheets
-    nome = name
-    tel = phone
-    cidade = city
-    nivel = level
-    tipo_inscricao = inscription_type
-    estilo_danca = dance_style
-    nota = message
+    # Security: Sanitize all inputs
+    nome = sanitize_text_input(name, 100)
+    tel = sanitize_phone(phone)
+    email_clean = sanitize_email(email) if email else ""
+    cidade = sanitize_text_input(city, 100)
+    nivel = sanitize_text_input(level, 50)
+    registration_type = sanitize_text_input(inscription_type, 50)
+    estilo_danca = sanitize_text_input(dance_style, 50)
+    nota = sanitize_text_input(message, 500) if message else ""
+    
+    # Validate required fields
+    if not nome or not tel or not cidade:
+        raise HTTPException(status_code=400, detail="Campos obrigatórios em falta")
     
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     try:
         # Adicionar linha ao Google Sheets
         if GOOGLE_SHEETS_ENABLED and preregistration_sheet:
-            preregistration_sheet.append_row([timestamp, nome, tel, cidade, nivel, tipo_inscricao, estilo_danca, nota or ""])
+            preregistration_sheet.append_row([timestamp, nome, tel, cidade, nivel, registration_type, estilo_danca, nota or ""])
             print(f"✅ Dados salvos no Google Sheets: {nome} - {timestamp}")
         else:
             print(f"📝 Google Sheets não disponível. Dados: {nome}, {tel}, {cidade}")
@@ -158,54 +252,65 @@ async def preregister(
         })
 
 
-@app.get("/inscricao", response_class=HTMLResponse)
-async def inscricao_page(request: Request):
-    """Página de inscrição completa"""
-    return templates.TemplateResponse("inscricao.html", {"request": request})
+@app.get("/register", response_class=HTMLResponse)
+async def register_page(request: Request):
+    """Página de registo completo"""
+    return templates.TemplateResponse("register.html", {"request": request})
 
-@app.post("/inscricao")
-async def inscricao_submit(request: Request):
-    """Submissão do formulário de inscrição"""
+@app.post("/register")
+@limiter.limit("3/minute")
+async def register(
+    request: Request,
+    nome: str = Form(...),
+    email: str = Form(...),
+    telefone: str = Form(...),
+    idade: str = Form(...),
+    experiencia_danca: str = Form(...),
+    objetivo: str = Form(...),
+    disponibilidade: str = Form(...),
+    nota: str = Form(None)  # Campo opcional
+):
+    """Submissão do formulário de registo completo"""
+    
+    # Security: Sanitize all inputs
+    nome_clean = sanitize_text_input(nome, 100)
+    email_clean = sanitize_email(email)
+    telefone_clean = sanitize_phone(telefone)
+    idade_clean = sanitize_text_input(idade, 10)
+    experiencia_clean = sanitize_text_input(experiencia_danca, 200)
+    objetivo_clean = sanitize_text_input(objetivo, 300)
+    disponibilidade_clean = sanitize_text_input(disponibilidade, 200)
+    nota_clean = sanitize_text_input(nota, 500) if nota else ""
+    
+    # Validate required fields
+    if not nome_clean or not email_clean or not telefone_clean:
+        raise HTTPException(status_code=400, detail="Campos obrigatórios em falta ou inválidos")
+    
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
     try:
-        # Obter dados JSON do corpo da requisição
-        data = await request.json()
-        
-        # Extrair informações do formulário (seguindo o formato original fozcaribe.com)
-        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        nome = data.get('nome', '')
-        tel = data.get('tel', '')
-        cidade = data.get('cidade', '')
-        turma = data.get('turma', '')
-        nascimento = data.get('nascimento', '')
-        pessoas = data.get('pessoas', '1')
-        tipo_mensalidade = data.get('tipo_mensalidade', '')
-        nota = data.get('nota', '')
-        
-        # Validações básicas
-        if not all([nome, tel, cidade, turma, nascimento, tipo_mensalidade]):
-            return JSONResponse(
-                content={"success": False, "message": "Campos obrigatórios em falta"},
-                status_code=400
-            )
-        
-        # Salvar no Google Sheets
-        if GOOGLE_SHEETS_ENABLED and inscricao_sheet:
-            inscricao_sheet.append_row([
-                timestamp, nome, tel, cidade, turma, nascimento, 
-                pessoas, tipo_mensalidade, nota
+        # Adicionar linha ao Google Sheets (planilha Registrations)
+        if GOOGLE_SHEETS_ENABLED and registration_sheet:
+            registration_sheet.append_row([
+                timestamp, nome_clean, email_clean, telefone_clean, idade_clean, 
+                experiencia_clean, objetivo_clean, disponibilidade_clean, nota_clean
             ])
-            print(f"✅ Inscrição salva no Google Sheets: {nome} - {timestamp}")
+            print(f"✅ Registo completo salvo no Google Sheets: {nome_clean} - {timestamp}")
         else:
-            print(f"📝 Google Sheets não disponível. Inscrição: {nome}, {tel}")
+            print(f"📝 Google Sheets não disponível. Registo: {nome_clean}, {email_clean}, {telefone_clean}")
         
-        return JSONResponse(content={"success": True, "message": "Inscrição submetida com sucesso"})
-        
+        # Redirecionar para página de sucesso
+        return templates.TemplateResponse("register_success.html", {
+            "request": request,
+            "registration": {"name": nome_clean, "timestamp": timestamp}
+        })
     except Exception as e:
-        print(f"Erro na inscrição: {e}")
-        return JSONResponse(
-            content={"success": False, "message": "Erro interno do servidor"},
-            status_code=500
-        )
+        print(f"Erro no registo: {e}")
+        return templates.TemplateResponse("register.html", {
+            "request": request,
+            "error": "Falha no registo. Por favor, tente novamente."
+        })
+
 
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
@@ -213,14 +318,15 @@ async def login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 @app.post("/login")
+@limiter.limit("10/minute")
 async def login_submit(request: Request):
     """Submissão do formulário de login"""
     try:
         # Obter dados JSON do corpo da requisição
         data = await request.json()
         
-        email = data.get('email', '')
-        password = data.get('password', '')
+        email = sanitize_email(data.get('email', ''))
+        password = data.get('password', '')[:100]  # Limit password length
         remember = data.get('remember', False)
         
         # Validações básicas
@@ -247,7 +353,7 @@ async def login_submit(request: Request):
                                 return JSONResponse(content={
                                     "success": True, 
                                     "message": "Login efetuado com sucesso",
-                                    "redirect": "/dashboard",
+                                    "redirect": "/",
                                     "user": user_name
                                 })
                 
@@ -268,7 +374,7 @@ async def login_submit(request: Request):
                 return JSONResponse(content={
                     "success": True, 
                     "message": "Login efetuado com sucesso",
-                    "redirect": "/dashboard",
+                    "redirect": "/",
                     "user": "Administrador"
                 })
             else:
@@ -283,12 +389,6 @@ async def login_submit(request: Request):
             content={"success": False, "message": "Erro interno do servidor"},
             status_code=500
         )
-
-@app.get("/dashboard", response_class=HTMLResponse)
-async def dashboard(request: Request):
-    """Dashboard básico após login"""
-    return templates.TemplateResponse("dashboard.html", {"request": request})
-
 
 def get_gallery_images():
     gallery_dir = "static/gallery"
@@ -333,138 +433,6 @@ async def gallery(request: Request):
         "request": request,
         "images": images
     })
-
-@app.get("/galeria", response_class=HTMLResponse)
-async def galeria(request: Request):
-    """Alias para galeria em português"""
-    media_files = get_drive_files()
-    
-    # Converter para formato compatível com template existente
-    images = []
-    for media in media_files:
-        images.append({
-            "filename": media['name'],
-            "url": media['downloadLink'],
-            "id": media['id'],
-            "mimeType": media['mimeType'],
-            "isVideo": media['isVideo'],
-            "isImage": media['isImage']
-        })
-    
-    return templates.TemplateResponse("gallery.html", {
-        "request": request,
-        "images": images
-    })
-
-@app.get("/galeria/conteudo-login", response_class=HTMLResponse)
-async def galeria_conteudo_login(request: Request):
-    """Página de login para conteúdo exclusivo"""
-    return templates.TemplateResponse("galery_conteudo_login.html", {
-        "request": request
-    })
-
-@app.post("/galeria/conteudo-login")
-async def galeria_conteudo_login_post(
-    request: Request,
-    username: str = Form(...),
-    pin: str = Form(...)
-):
-    """Verificação de login para conteúdo exclusivo"""
-    try:
-        if GOOGLE_SHEETS_ENABLED and preregistration_sheet:
-            # Buscar usuários registrados (pode adaptar conforme sua necessidade)
-            all_users = preregistration_sheet.get_all_values()[1:]  # Skip headers
-            users_dict = {row[1].strip(): str(len(row[1])) for row in all_users}  # Nome → PIN simples
-            
-            # Verificação simples - pode melhorar conforme necessário
-            if username.strip() in users_dict:
-                return RedirectResponse(url=f"/galeria/conteudo/{username}/salsa", status_code=302)
-        
-        return templates.TemplateResponse("galery_conteudo_login.html", {
-            "request": request,
-            "error": "Nome ou PIN inválido"
-        })
-    except Exception as e:
-        print(f"Erro no login: {e}")
-        return templates.TemplateResponse("galery_conteudo_login.html", {
-            "request": request,
-            "error": "Erro no sistema de login"
-        })
-
-@app.get("/galeria/conteudo/{username}/bachata-fundamentos", response_class=HTMLResponse)
-async def galeria_conteudo_bachata_fund(request: Request, username: str):
-    """Galeria Bachata Fundamentos"""
-    media_files = get_conteudo_bachata_fund()
-    return templates.TemplateResponse("galery_conteudo_bachata_fund.html", {
-        "request": request,
-        "username": username,
-        "media_files": media_files
-    })
-
-@app.get("/galeria/conteudo/{username}/bachata-intermedio", response_class=HTMLResponse)
-async def galeria_conteudo_bachata_int(request: Request, username: str):
-    """Galeria Bachata Intermédio"""
-    media_files = get_conteudo_bachata_int()
-    return templates.TemplateResponse("galery_conteudo_bachata_int.html", {
-        "request": request,
-        "username": username,
-        "media_files": media_files
-    })
-
-@app.get("/galeria/conteudo/{username}/salsa", response_class=HTMLResponse)
-async def galeria_conteudo_salsa(request: Request, username: str):
-    """Galeria Salsa"""
-    media_files = get_conteudo_salsa()
-    return templates.TemplateResponse("galery_conteudo_salsa.html", {
-        "request": request,
-        "username": username,
-        "media_files": media_files
-    })
-
-@app.get("/galeria/sunset", response_class=HTMLResponse)
-async def galeria_sunset(request: Request):
-    """Galeria Sunset (pública)"""
-    media_files = get_sunset()
-    return templates.TemplateResponse("galery_sunset.html", {
-        "request": request,
-        "media_files": media_files
-    })
-
-@app.get("/galeria/aulas", response_class=HTMLResponse)
-async def galeria_aulas(request: Request):
-    """Galeria de Aulas (pública)"""
-    media_files = get_aulas()
-    return templates.TemplateResponse("galery_aulas.html", {
-        "request": request,
-        "media_files": media_files
-    })
-
-# Funções para buscar arquivos das diferentes pastas do Google Drive
-FOLDER_ID_bachata_int = "1U2RM0P-_88KN8Eibs7WJkbf4hozKAqPZ"
-FOLDER_ID_bachata_fund = "1Fb7drcC1HwvLQGqCWvd9bkV0NTv0nzw4"
-FOLDER_ID_salsa = "1OuBDGBqvUKxvNWM2vdJxPG_DlwZ2zcWo"
-FOLDER_ID_sunset = "1gd64oEz09oFCh4VhqC09yfLSGAg4iJbB"
-FOLDER_ID_aulas = "1kP8rVjVNBUaWYOcvEeCdI04q8NgB7Uy3"
-
-def get_conteudo_bachata_fund():
-    """Busca arquivos da pasta Bachata Fundamentos"""
-    return get_drive_files(FOLDER_ID_bachata_fund)
-
-def get_conteudo_bachata_int():
-    """Busca arquivos da pasta Bachata Intermédio"""
-    return get_drive_files(FOLDER_ID_bachata_int)
-
-def get_conteudo_salsa():
-    """Busca arquivos da pasta Salsa"""
-    return get_drive_files(FOLDER_ID_salsa)
-
-def get_sunset():
-    """Busca arquivos da pasta Sunset"""
-    return get_drive_files(FOLDER_ID_sunset)
-
-def get_aulas():
-    """Busca arquivos da pasta Aulas"""
-    return get_drive_files(FOLDER_ID_aulas)
 
 @app.get("/drive-image/{file_id}")
 async def serve_drive_image(file_id: str):

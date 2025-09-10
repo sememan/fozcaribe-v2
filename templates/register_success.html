@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registo Completo - Sucesso! - FozCaribe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .success-animation {
+            animation: successPulse 2s ease-in-out infinite alternate;
+        }
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f1c40f;
+            animation: confetti 3s linear infinite;
+        }
+        @keyframes confetti {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="min-h-screen gradient-bg relative overflow-hidden">
+    <!-- Confetti Animation -->
+    <div class="confetti" style="left: 10%; animation-delay: 0s; background: #e74c3c;"></div>
+    <div class="confetti" style="left: 20%; animation-delay: 0.5s; background: #f39c12;"></div>
+    <div class="confetti" style="left: 30%; animation-delay: 1s; background: #27ae60;"></div>
+    <div class="confetti" style="left: 40%; animation-delay: 1.5s; background: #3498db;"></div>
+    <div class="confetti" style="left: 50%; animation-delay: 2s; background: #9b59b6;"></div>
+    <div class="confetti" style="left: 60%; animation-delay: 2.5s; background: #e67e22;"></div>
+    <div class="confetti" style="left: 70%; animation-delay: 3s; background: #e74c3c;"></div>
+    <div class="confetti" style="left: 80%; animation-delay: 3.5s; background: #f1c40f;"></div>
+    <div class="confetti" style="left: 90%; animation-delay: 4s; background: #27ae60;"></div>
+
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-sm shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center space-x-2">
+                        <i class="fas fa-music text-2xl text-indigo-600"></i>
+                        <span class="text-xl font-bold text-gray-800">FozCaribe</span>
+                    </a>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-700 hover:text-indigo-600 transition-colors">Início</a>
+                    <a href="/galeria" class="text-gray-700 hover:text-indigo-600 transition-colors">Galeria</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Success Content -->
+    <div class="pt-20 pb-12 relative z-10">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <!-- Success Icon -->
+                <div class="success-animation mb-8">
+                    <div class="w-32 h-32 bg-green-500 rounded-full flex items-center justify-center mx-auto shadow-2xl">
+                        <i class="fas fa-check text-6xl text-white"></i>
+                    </div>
+                </div>
+
+                <!-- Success Message -->
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">
+                    Registo Completo!
+                </h1>
+                
+                <div class="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 md:p-12 mb-8">
+                    <div class="mb-6">
+                        <i class="fas fa-user-check text-4xl text-green-500 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                            Obrigado, {{ registration.name }}!
+                        </h2>
+                        <p class="text-lg text-gray-600 mb-6">
+                            O seu registo completo foi submetido com sucesso em {{ registration.timestamp }}.
+                        </p>
+                    </div>
+
+                    <!-- Next Steps -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 mb-8">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">
+                            <i class="fas fa-list-check text-indigo-600 mr-2"></i>
+                            Próximos Passos
+                        </h3>
+                        <div class="text-left space-y-3">
+                            <div class="flex items-center">
+                                <i class="fas fa-envelope text-indigo-500 mr-3"></i>
+                                <span class="text-gray-700">Receberá um email de confirmação em breve</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-phone text-indigo-500 mr-3"></i>
+                                <span class="text-gray-700">A nossa equipa entrará em contacto para agendar a primeira aula</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-calendar text-indigo-500 mr-3"></i>
+                                <span class="text-gray-700">Prepare-se para começar a sua jornada de dança!</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a href="/galeria" 
+                           class="bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold py-4 px-6 rounded-xl hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl inline-block">
+                            <i class="fas fa-images mr-2"></i>
+                            Ver Galeria
+                        </a>
+                        <a href="/" 
+                           class="bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-bold py-4 px-6 rounded-xl hover:from-indigo-700 hover:to-blue-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl inline-block">
+                            <i class="fas fa-home mr-2"></i>
+                            Voltar ao Início
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-lg">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                        <i class="fas fa-headset text-indigo-600 mr-2"></i>
+                        Precisa de Ajuda?
+                    </h3>
+                    <div class="flex flex-col md:flex-row justify-center items-center space-y-2 md:space-y-0 md:space-x-6">
+                        <div class="flex items-center">
+                            <i class="fas fa-envelope text-gray-600 mr-2"></i>
+                            <span class="text-gray-700">info@fozcaribe.com</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fas fa-phone text-gray-600 mr-2"></i>
+                            <span class="text-gray-700">+351 XXX XXX XXX</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto redirect after 30 seconds
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 30000);
+
+        // Add more confetti
+        function createConfetti() {
+            const confetti = document.createElement('div');
+            confetti.classList.add('confetti');
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.animationDelay = Math.random() * 3 + 's';
+            confetti.style.background = ['#e74c3c', '#f39c12', '#27ae60', '#3498db', '#9b59b6', '#e67e22', '#f1c40f'][Math.floor(Math.random() * 7)];
+            document.body.appendChild(confetti);
+
+            // Remove confetti after animation
+            setTimeout(() => {
+                confetti.remove();
+            }, 3000);
+        }
+
+        // Create confetti every 500ms for first 10 seconds
+        let confettiCount = 0;
+        const confettiInterval = setInterval(() => {
+            createConfetti();
+            confettiCount++;
+            if (confettiCount > 20) {
+                clearInterval(confettiInterval);
+            }
+        }, 500);
+    </script>
+</body>
+</html>

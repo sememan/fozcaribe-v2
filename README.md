@@ -9,7 +9,7 @@
 - ✅ **Sistema de inscrição completa** com formulário detalhado
 - ✅ **Sistema de login** e autenticação de utilizadores
 - ✅ **Galeria de imagens e vídeos** integrada com Google Drive
-- ✅ **Dashboard administrativo** com estatísticas e gestão
+- ✅ **Sistema de autenticação** com Google Sheets
 - ✅ **Design responsivo** otimizado para mobile e desktop
 - ✅ **Interface em português** adaptada ao público português
 - ✅ **Conteúdo exclusivo** para alunos registados
@@ -118,9 +118,8 @@ fozcaribe.v2/
 │   ├── base.html          # Template base com navegação
 │   ├── index.html         # Homepage com estatísticas
 │   ├── preregister.html   # Formulário de pré-inscrição
-│   ├── inscricao.html     # Formulário de inscrição completa
+│   ├── register.html      # Formulário de inscrição completa
 │   ├── login.html         # Sistema de login
-│   ├── dashboard.html     # Dashboard administrativo
 │   └── gallery.html       # Galeria principal
 ├── static/               # Ficheiros estáticos
 │   ├── css/              # Estilos CSS personalizados

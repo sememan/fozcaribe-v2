@@ -1,48 +1,105 @@
-<!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
-- [x] Verify that the copilot-instructions.md file in the .github directory is created.
+# FozCaribe v2.0 - AI Coding Agent Instructions
 
-- [x] Clarify Project Requirements: FastAPI with Python virtual environment, modern responsive design for web app with pre-registration and gallery functionality
+## Project Architecture
 
-- [x] Scaffold the Project
-	<!--
-	Created Python virtual environment and installed FastAPI with modern web dependencies.
-	-->
+**FastAPI + Google Cloud Integration**: Modern dance school web app with Portuguese localization, built as a single-file monolith (`main.py`) with external Google Services for data persistence and media storage.
 
-- [x] Customize the Project
-	<!--
-	Created modern web application with:
-	- FastAPI backend with pre-registration and gallery functionality
-	- Beautiful responsive templates with Tailwind CSS
-	- Modern JavaScript enhancements
-	- Complete project structure and documentation
-	-->
+### Core Components
+- **Backend**: FastAPI app with Jinja2 templates, serving both API endpoints and rendered HTML
+- **Data Layer**: Google Sheets as database (Preregistrations, Registrations, Users worksheets)
+- **Media Storage**: Google Drive with authenticated proxy serving (`/drive-image/{file_id}`)
+- **Frontend**: Tailwind CSS + vanilla JS, no build process required
 
-- [x] Install Required Extensions
-	<!-- No extensions needed for this FastAPI project. -->
+### Key Integration Pattern
+```python
+# Google Services initialization with graceful fallback
+try:
+    credentials = Credentials.from_service_account_file("credentials.json", scopes=scopes)
+    client = gspread.authorize(credentials)
+    drive_service = build("drive", "v3", credentials=credentials)
+    GOOGLE_SHEETS_ENABLED = True
+except Exception:
+    GOOGLE_SHEETS_ENABLED = False  # App continues without external services
+```
 
-- [x] Compile the Project
-	<!--
-	Verified that all previous steps have been completed.
-	All dependencies are installed and no errors found.
-	Project structure is complete and ready to run.
-	-->
+## Critical Development Workflows
 
-- [x] Create and Run Task
-	<!--
-	Verified that all previous steps have been completed.
-	Created and launched development task. Application running on http://localhost:8000
-	-->
+### Local Development
+```bash
+# ALWAYS use the virtual environment Python binary
+/Users/emanuele/PycharmProjects/fozcaribe.v2/venv/bin/python -m uvicorn main:app --reload --port 8000
+```
 
-- [x] Launch the Project
-	<!--
-	Verified that all previous steps have been completed.
-	Application is running on http://localhost:8000
-	Ready for user interaction and testing.
-	-->
+### Google Sheets Auto-Creation Pattern
+Worksheets are created on-demand if missing:
+```python
+try:
+    sheet = spreadsheet.worksheet("SheetName")
+except gspread.WorksheetNotFound:
+    sheet = spreadsheet.add_worksheet("SheetName", rows=1000, cols=10)
+    sheet.append_row(['Header1', 'Header2', ...])  # Always add headers
+```
 
-- [x] Ensure Documentation is Complete
-	<!--
-	Verified that all previous steps have been completed.
-	README.md and copilot-instructions.md files exist and contain current project information.
-	Project is complete and ready for use.
-	-->
+### Template Inheritance Strategy
+- `base.html`: Shared navigation, Tailwind config, brand colors
+- Page templates: Either extend base (`{% extends "base.html" %}`) or standalone with full styling
+- Portuguese language throughout (`lang="pt"`)
+
+## Project-Specific Conventions
+
+### Form Processing Patterns
+**Different forms = different endpoints + worksheets**:
+- `/preregister` → "Preregistrations" sheet (quick signup)
+- `/register` → "Registrations" sheet (detailed form with experience, goals)
+- `/inscricao` template exists but endpoint was removed (avoid confusion)
+
+### Google Drive Folder Structure
+Multiple hardcoded folder IDs for different galleries:
+```python
+FOLDER_ID = '1769MEGbRjrUFu_HbplMDY0fh-9meEVuA'  # Main gallery
+FOLDER_ID_bachata_fund = "1Fb7drcC1HwvLQGqCWvd9bkV0NTv0nzw4"  # Course content
+FOLDER_ID_salsa = "1OuBDGBqvUKxvNWM2vdJxPG_DlwZ2zcWo"
+# etc.
+```
+
+### Error Handling Philosophy
+- External service failures don't break the app (graceful degradation)
+- Always provide Portuguese error messages in templates
+- Use console logging for debugging: `print(f"✅ Success: {details}")` or `print(f"❌ Error: {error}")`
+
+## Cross-Component Communication
+
+### Media Serving Architecture
+Google Drive files are proxied through FastAPI to handle authentication:
+```python
+@app.get("/drive-image/{file_id}")
+async def serve_drive_image(file_id: str):
+    # Downloads from Google Drive, streams to client with proper headers
+```
+
+### Template Data Flow
+Controllers pass minimal context to templates:
+```python
+return templates.TemplateResponse("template.html", {
+    "request": request,
+    "registration": {"name": nome, "timestamp": timestamp}
+})
+```
+
+### Deployment Configuration
+- **Render.com ready**: `build.sh`, `Procfile`, `render.yaml` all configured
+- **Environment variables**: Store Google credentials as `GOOGLE_CREDENTIALS_JSON`
+- **Static files**: Served directly by FastAPI, no CDN required
+
+## Key Files for Understanding
+- `main.py`: Single-file application (595 lines) - start here
+- `templates/base.html`: Navigation + Tailwind configuration
+- `templates/index.html`: Homepage with 5-column statistics grid
+- `requirements.txt`: All dependencies (google-api-python-client, gspread, fastapi)
+- `DEPLOY_RENDER.md`: Complete deployment instructions
+
+## Portuguese Context
+- All user-facing text in Portuguese (Portugal variant)
+- Form field names use Portuguese: `nome`, `telefone`, `cidade`
+- Business logic reflects Portuguese dance school operations
+- Timestamps use Portuguese format: `%Y-%m-%d %H:%M:%S`
