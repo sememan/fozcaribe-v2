@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, Form, File, UploadFile, HTTPException
+from fastapi import FastAPI, Request, Form, HTTPException
 from fastapi.responses import HTMLResponse, RedirectResponse, StreamingResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -12,9 +12,7 @@ from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
-from typing import List
 import os
-import json
 import bleach
 import re
 from datetime import datetime
@@ -89,9 +87,7 @@ async def general_exception_handler(request: Request, exc: Exception):
 os.makedirs("static/css", exist_ok=True)
 os.makedirs("static/js", exist_ok=True)
 os.makedirs("static/images", exist_ok=True)
-os.makedirs("static/gallery", exist_ok=True)
 os.makedirs("templates", exist_ok=True)
-os.makedirs("data", exist_ok=True)
 
 
 
@@ -389,19 +385,6 @@ async def login_submit(request: Request):
             content={"success": False, "message": "Erro interno do servidor"},
             status_code=500
         )
-
-def get_gallery_images():
-    gallery_dir = "static/gallery"
-    if os.path.exists(gallery_dir):
-        images = []
-        for filename in os.listdir(gallery_dir):
-            if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.webp')):
-                images.append({
-                    "filename": filename,
-                    "url": f"/static/gallery/{filename}"
-                })
-        return images
-    return []
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):

@@ -12,8 +12,6 @@ def create_directories():
         "static/css",
         "static/js", 
         "static/images",
-        "static/gallery",
-        "data",
         "templates"
     ]
     
@@ -52,17 +50,16 @@ def check_credentials():
         print("📝 Por favor, adicione suas credenciais do Google Cloud Platform")
 
 def create_sample_data():
-    """Criar dados de exemplo se necessário"""
-    data_dir = "data"
-    if not os.path.exists(f"{data_dir}/sample.json"):
-        sample_data = {
+    """Criar configuração de exemplo se necessário"""
+    if not os.path.exists("config.json"):
+        sample_config = {
             "setup_date": "2025-01-01",
             "version": "2.0.0",
             "status": "configured"
         }
-        with open(f"{data_dir}/sample.json", 'w') as f:
-            json.dump(sample_data, f, indent=2)
-        print("✅ Arquivo de dados de exemplo criado")
+        with open("config.json", 'w') as f:
+            json.dump(sample_config, f, indent=2)
+        print("✅ Arquivo de configuração de exemplo criado")
 
 def main():
     """Função principal de setup"""

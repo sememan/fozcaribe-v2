@@ -134,16 +134,9 @@ fozcaribe.v2/
 |------|--------|-----------|
 | `/` | GET | Homepage com estatísticas e apresentação |
 | `/preregister` | GET/POST | Formulário de pré-inscrição rápida |
-| `/inscricao` | GET/POST | Formulário de inscrição completa |
+| `/register` | GET/POST | Formulário de inscrição completa |
 | `/login` | GET/POST | Sistema de autenticação |
-| `/dashboard` | GET | Painel administrativo (requer login) |
 | `/gallery` | GET | Galeria pública de imagens e vídeos |
-| `/galeria/conteudo-login` | GET/POST | Acesso a conteúdo exclusivo |
-| `/galeria/conteudo/{user}/bachata-fundamentos` | GET | Conteúdo Bachata Fundamentos |
-| `/galeria/conteudo/{user}/bachata-intermedio` | GET | Conteúdo Bachata Intermédio |
-| `/galeria/conteudo/{user}/salsa` | GET | Conteúdo Salsa |
-| `/galeria/sunset` | GET | Galeria Sunset (pública) |
-| `/galeria/aulas` | GET | Galeria de Aulas (pública) |
 | `/drive-image/{file_id}` | GET | Proxy para imagens do Google Drive |
 
 ## 🔐 Funcionalidades de Segurança
