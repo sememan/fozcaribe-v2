@@ -86,7 +86,6 @@ async def general_exception_handler(request: Request, exc: Exception):
 # Create directories if they don't exist
 os.makedirs("static/css", exist_ok=True)
 os.makedirs("static/js", exist_ok=True)
-os.makedirs("static/images", exist_ok=True)
 os.makedirs("templates", exist_ok=True)
 
 
@@ -174,7 +173,7 @@ try:
     except gspread.WorksheetNotFound:
         preregistration_sheet = spreadsheet.add_worksheet("Preregistrations", rows=1000, cols=10)
         # Adicionar cabeçalhos
-        preregistration_sheet.append_row(['Nome', 'Email', 'Telefone', 'Idade', 'Experiencia', 'Timestamp'])
+        preregistration_sheet.append_row(['Timestamp', 'Nome', 'Telefone', 'Cidade', 'Nivel', 'Tipo_Inscricao', 'Estilo_Danca', 'Nota'])
     
     try:
         users_sheet = spreadsheet.worksheet("Users")
