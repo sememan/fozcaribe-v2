@@ -273,7 +273,9 @@ async def register(
     cidade: str = Form(...),
     month: str = Form(...),      # Month from select
     day: str = Form(...),        # Day from select
-    inscricao: str = Form(...),  # Registration type
+    inscricao: str = Form(...),  # Registration type (NOVO/RENOVO)
+    nivel: str = Form(...),      # Level (Basal/Plus)
+    tipo_danca: str = Form(...), # Dance style
     nota: str = Form(None),      # Optional note
     aceito_termos: str = Form(None)  # Terms acceptance checkbox
 ):
@@ -284,6 +286,8 @@ async def register(
     telefone_clean = sanitize_phone(telefone)
     cidade_clean = sanitize_text_input(cidade, 100)
     inscricao_clean = sanitize_text_input(inscricao, 100)
+    nivel_clean = sanitize_text_input(nivel, 100)
+    tipo_danca_clean = sanitize_text_input(tipo_danca, 100)
     nota_clean = sanitize_text_input(nota, 500) if nota else ""
     
     # Validate terms acceptance
@@ -317,8 +321,10 @@ async def register(
                 telefone_clean, # C: Tel
                 cidade_clean,   # D: Cidade
                 nascimento,     # E: Nascimento (formatted MM/DD)
-                inscricao_clean,  # F: Inscrição
-                nota_clean        # G: Nota
+                inscricao_clean,  # F: Inscrição (NOVO/RENOVO)
+                nivel_clean,      # G: Nível (Basal/Plus)
+                tipo_danca_clean, # H: Tipo de Dança
+                nota_clean        # I: Nota
             ])
             print(f"✅ Registo completo salvo no Google Sheets: {nome_clean} - {timestamp}")
         else:

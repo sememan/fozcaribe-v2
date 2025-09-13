@@ -234,11 +234,34 @@
                     <div class="form-floating">
                         <select id="inscricao" name="inscricao" required class="w-full">
                             <option value="">Selecione...</option>
-                            <option value="INSCRIÇÃO NOVA">INSCRIÇÃO NOVA - Sou novo/a aluno/a</option>
-                            <option value="RENOVAÇÃO">RENOVAÇÃO - Já sou aluno/a e pretendo renovar</option>
-                            <option value="REATIVAÇÃO">REATIVAÇÃO - Ex-aluno/a que pretende voltar</option>
+                            <option value="INSCRIÇÃO">INSCRIÇÃO - Sou novo/a e quero inscrever-me</option>
+                            <option value="RENOVAÇÃO">RENOVAÇÃO - Já sou aluno/a e pretendo renovar a inscrição</option>
                         </select>
                         <label for="inscricao">Tipo de Inscrição *</label>
+                    </div>
+
+                    <!-- Mensalidade e Nível -->
+                    <div class="form-floating">
+                        <select id="nivel" name="nivel" required class="w-full">
+                            <option value="">Selecione...</option>
+                            <option value="Basal">Mensalidade Basal - Nível Iniciado</option>
+                            <option value="Plus">Mensalidade Plus - Nível Fundamento/Intermédio</option>
+                            <option value="Mega">Mensalidade Mega - Nível Avançado/Coreográfico</option>
+                        </select>
+                        <label for="nivel">Mensalidade e Nível *</label>
+                    </div>
+
+                    <!-- Tipo de Dança -->
+                    <div class="form-floating">
+                        <select id="tipo_danca" name="tipo_danca" required class="w-full">
+                            <option value="">Selecione...</option>
+                            <option value="Merengue">Merengue</option>
+                            <option value="Bachata">Bachata</option>
+                            <option value="Salsa">Salsa</option>
+                            <option value="Kizomba">Kizomba</option>
+                            <option value="Chachachá">Chachachá</option>
+                        </select>
+                        <label for="tipo_danca">Estilo de Dança Preferido *</label>
                     </div>
 
                     <!-- Nota (Opcional) -->
