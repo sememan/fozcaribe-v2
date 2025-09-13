@@ -230,6 +230,20 @@
                             ></textarea>
                         </div>
 
+                        <!-- Nota Importante -->
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-4">
+                            <div class="flex items-start">
+                                <i class="fas fa-info-circle text-yellow-600 mt-1 mr-3"></i>
+                                <div>
+                                    <h4 class="font-semibold text-yellow-800 mb-2">Nota Importante</h4>
+                                    <p class="text-yellow-700 text-sm leading-relaxed">
+                                        As condições vão-se manter aproximadamente as mesmas do ano letivo passado. 
+                                        Os detalhes de horário, mensalidade e afins serão comunicados durante o período das aulas de setembro.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="pt-4">
                             <button 
                                 type="submit"
@@ -249,20 +263,6 @@
                             <div id="submit-status" class="sr-only" aria-live="polite"></div>
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
-
-        <!-- Nota Final -->
-        <div class="mt-12 bg-yellow-50 border border-yellow-200 rounded-xl p-6">
-            <div class="flex items-start">
-                <i class="fas fa-info-circle text-yellow-600 mt-1 mr-3"></i>
-                <div>
-                    <h4 class="font-semibold text-yellow-800 mb-2">Nota Importante</h4>
-                    <p class="text-yellow-700 text-sm leading-relaxed">
-                        As condições vão-se manter aproximadamente as mesmas do ano letivo passado. 
-                        Os detalhes de horário, mensalidade e afins serão comunicados durante o período das aulas de setembro.
-                    </p>
                 </div>
             </div>
         </div>
@@ -349,10 +349,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Form submission with loading state
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        // Validate all fields
+    form.addEventListener('submit', function(e) {
+        // Validate all fields before submission
         let isFormValid = true;
         Object.keys(validationRules).forEach(fieldName => {
             const field = document.getElementById(fieldName);
@@ -365,52 +363,23 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         if (!isFormValid) {
+            e.preventDefault();
             showMessage('Por favor, corrija os erros no formulário', 'error');
             return;
         }
 
-        // Show loading state
+        // Show loading state (form will submit normally after this)
         submitBtn.disabled = true;
         submitText.classList.add('hidden');
         loadingText.classList.remove('hidden');
         submitStatus.textContent = 'A processar inscrição...';
-
-        try {
-            // Submit form data
-            const formData = new FormData(form);
-            const response = await fetch('/preregister', {
-                method: 'POST',
-                body: formData
-            });
-
-            if (response.ok) {
-                showMessage('Pré-inscrição realizada com sucesso! Receberá confirmação em breve.', 'success');
-                
-                // Track conversion
-                if (typeof trackConversion === 'function') {
-                    trackConversion('preregistration', 'preregister_form');
-                }
-                
-                form.reset();
-                // Reset field styles
-                Object.keys(validationRules).forEach(fieldName => {
-                    const field = document.getElementById(fieldName);
-                    if (field) {
-                        field.classList.remove('border-green-500', 'border-red-500');
-                    }
-                });
-            } else {
-                throw new Error('Erro no servidor');
-            }
-        } catch (error) {
-            showMessage('Erro ao enviar formulário. Tente novamente mais tarde.', 'error');
-        } finally {
-            // Reset loading state
-            submitBtn.disabled = false;
-            submitText.classList.remove('hidden');
-            loadingText.classList.add('hidden');
-            submitStatus.textContent = '';
+        
+        // Track conversion
+        if (typeof trackConversion === 'function') {
+            trackConversion('preregistration', 'preregister_form');
         }
+        
+        // Let the form submit normally to redirect to success page
     });
 
     function showMessage(message, type) {

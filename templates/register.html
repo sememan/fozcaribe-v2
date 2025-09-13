@@ -115,13 +115,6 @@
                             <label for="nome">Nome Completo *</label>
                         </div>
 
-                        <!-- Email -->
-                        <div class="form-floating">
-                            <input type="email" id="email" name="email" placeholder=" " required
-                                   class="w-full">
-                            <label for="email">Email *</label>
-                        </div>
-
                         <!-- Telefone -->
                         <div class="form-floating">
                             <input type="tel" id="telefone" name="telefone" placeholder=" " required
@@ -129,59 +122,112 @@
                             <label for="telefone">Telefone *</label>
                         </div>
 
-                        <!-- Idade -->
+                        <!-- Cidade -->
                         <div class="form-floating">
-                            <input type="number" id="idade" name="idade" placeholder=" " required min="16" max="99"
+                            <input type="text" id="cidade" name="cidade" placeholder=" " required
                                    class="w-full">
-                            <label for="idade">Idade *</label>
+                            <label for="cidade">Cidade *</label>
+                        </div>
+
+                        <!-- Nascimento (Month/Day) -->
+                        <div class="md:col-span-2">
+                            <label for="nascimento" class="block text-sm font-semibold text-gray-700 mb-3">
+                                <i class="fas fa-calendar text-indigo-600 mr-2"></i>
+                                Nascimento *
+                            </label>
+                            <div class="flex gap-4">
+                                <select id="month" name="month" required 
+                                        class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+                                    <option value="" disabled selected>MM</option>
+                                    {% for m in range(1, 13) %}
+                                        <option value="{{ m }}">{{ m }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select id="day" name="day" required 
+                                        class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors">
+                                    <option value="" disabled selected>DD</option>
+                                    {% for d in range(1, 32) %}
+                                        <option value="{{ d }}">{{ d }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Experiência em Dança -->
+                    <!-- Tipo de Inscrição -->
                     <div class="form-floating">
-                        <select id="experiencia_danca" name="experiencia_danca" required class="w-full">
+                        <select id="inscricao" name="inscricao" required class="w-full">
                             <option value="">Selecione...</option>
-                            <option value="Iniciante">Iniciante</option>
-                            <option value="Básico">Básico</option>
-                            <option value="Intermédio">Intermédio</option>
-                            <option value="Avançado">Avançado</option>
+                            <option value="INSCRIÇÃO NOVA">INSCRIÇÃO NOVA - Sou novo/a aluno/a</option>
+                            <option value="RENOVAÇÃO">RENOVAÇÃO - Já sou aluno/a e pretendo renovar</option>
+                            <option value="REATIVAÇÃO">REATIVAÇÃO - Ex-aluno/a que pretende voltar</option>
                         </select>
-                        <label for="experiencia_danca">Experiência em Dança *</label>
-                    </div>
-
-                    <!-- Objetivo -->
-                    <div class="form-floating">
-                        <select id="objetivo" name="objetivo" required class="w-full">
-                            <option value="">Selecione...</option>
-                            <option value="Hobby/Diversão">Hobby/Diversão</option>
-                            <option value="Exercício Físico">Exercício Físico</option>
-                            <option value="Competição">Competição</option>
-                            <option value="Performance">Performance</option>
-                            <option value="Desenvolvimento Pessoal">Desenvolvimento Pessoal</option>
-                        </select>
-                        <label for="objetivo">Objetivo Principal *</label>
-                    </div>
-
-                    <!-- Disponibilidade -->
-                    <div class="form-floating">
-                        <select id="disponibilidade" name="disponibilidade" required class="w-full">
-                            <option value="">Selecione...</option>
-                            <option value="Segunda-feira">Segunda-feira</option>
-                            <option value="Terça-feira">Terça-feira</option>
-                            <option value="Quarta-feira">Quarta-feira</option>
-                            <option value="Quinta-feira">Quinta-feira</option>
-                            <option value="Sexta-feira">Sexta-feira</option>
-                            <option value="Sábado">Sábado</option>
-                            <option value="Domingo">Domingo</option>
-                            <option value="Flexível">Flexível</option>
-                        </select>
-                        <label for="disponibilidade">Disponibilidade Preferencial *</label>
+                        <label for="inscricao">Tipo de Inscrição *</label>
                     </div>
 
                     <!-- Nota (Opcional) -->
                     <div class="form-floating">
                         <textarea id="nota" name="nota" placeholder=" " rows="4" class="w-full resize-none"></textarea>
                         <label for="nota">Notas/Comentários (Opcional)</label>
+                    </div>
+
+                    <!-- Informações Importantes do Curso -->
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">
+                            <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                            Informações Importantes do Curso
+                        </h3>
+                        
+                        <div class="space-y-4 text-sm text-gray-700">
+                            <div>
+                                <p><strong>Início do Ano Letivo:</strong> Ter 23 Set '25</p>
+                                <p><strong>Duas Aulas Gratuitas:</strong> Ter 23 Set '25</p>
+                            </div>
+                            
+                            <div>
+                                <p><strong>HORÁRIO:</strong></p>
+                                <p><strong>Iniciado</strong> | Terças às 21h<br>
+                                <strong>Intermédio</strong> | Terças às 22h<br>
+                                <strong>Avançado</strong> | Proximamente</p>
+                            </div>
+                            
+                            <div>
+                                <p><strong>Morada da Escola:</strong><br>
+                                Tao Yoga e Bem-Estar<br>
+                                R. Fernando Tomás 15, 1º<br>
+                                3080-055 Figueira da Foz</p>
+                            </div>
+                            
+                            <div>
+                                <p><strong>Mensalidade Basal:</strong> 25€*</p>
+                                <p class="text-xs text-gray-600">* Mensalidade para o nível Iniciado, no FozCaribe e na Flowmotion. Para níveis acima de Iniciado, acresce valor.</p>
+                                <p class="text-xs text-gray-600 mt-2">A mensalidade é devida a partir do momento da inscrição, independentemente da assiduidade do aluno. A vaga do aluno fica garantida e o valor mensal mantém-se, esteja presente nas aulas ou não. A cobrança mensal só deixará de ser feita após pedido explícito de desinscrição formal.</p>
+                                <p class="text-xs text-gray-600 mt-2">A mensalidade cobre aproximadamente 85% das semanas do ano letivo, permitindo 1 a 1,5 semanas de pausa a cada 2 meses (por exemplo: feriados, férias, ausências pontuais, etc.).</p>
+                            </div>
+                            
+                            <div>
+                                <p><strong>Ritmos:</strong><br>
+                                Ritmos caribenhos, como Merengue, Salsa e Bachata, além de Kizomba, ChaChaCha e outros ritmos afrolatinos.</p>
+                            </div>
+                            
+                            <div>
+                                <p><strong>Eventos:</strong><br>
+                                Nós, do FozCaribe, organizamos eventos e encontros sociais mensais para incentivar a prática dos ensinamentos semanais e extraordinários (workshops e eventos), assim como fortalecer a coesão da família caribenha. :)</p>
+                                <p class="text-xs text-gray-600 mt-1">• Sunset Café no primeiro domingo do mês</p>
+                                <p class="text-xs text-gray-600">• Social Afrolatino no terceiro sábado do mês</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Acceptance Checkbox -->
+                        <div class="mt-6 pt-4 border-t border-blue-200">
+                            <label class="flex items-start space-x-3 cursor-pointer">
+                                <input type="checkbox" id="aceito_termos" name="aceito_termos" required 
+                                       class="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-sm text-gray-700">
+                                    <strong>Li e aceito</strong> todas as informações acima, incluindo as condições de mensalidade, horários e política de desinscrição.
+                                </span>
+                            </label>
+                        </div>
                     </div>
 
                     <!-- Submit Button -->

@@ -165,8 +165,8 @@ try:
         registration_sheet = spreadsheet.worksheet("Registrations")
     except gspread.WorksheetNotFound:
         registration_sheet = spreadsheet.add_worksheet("Registrations", rows=1000, cols=10)
-        # Adicionar cabeçalhos para registro completo
-        registration_sheet.append_row(['Timestamp', 'Nome', 'Email', 'Telefone', 'Idade', 'Experiencia_danca', 'Objetivo', 'Disponibilidade', 'Nota'])
+        # Add headers matching your Google Sheets structure
+        registration_sheet.append_row(['Timestamp', 'Nome', 'Tel', 'Cidade', 'Nascimento', 'Inscrição', 'Nota'])
 
     try:
         preregistration_sheet = spreadsheet.worksheet("Preregistrations")
@@ -234,10 +234,22 @@ async def preregister(
         else:
             print(f"📝 Google Sheets não disponível. Dados: {nome}, {tel}, {cidade}")
         
-        # Redirect to success page with name
+        # Redirect to success page with complete registration data
+        registration_id = f"PRE{timestamp.replace('-', '').replace(':', '').replace(' ', '')}"
         return templates.TemplateResponse("preregister_success.html", {
             "request": request,
-            "registration": {"name": nome, "timestamp": timestamp}
+            "registration": {
+                "id": registration_id,
+                "name": nome,
+                "phone": tel,
+                "email": email_clean,
+                "city": cidade,
+                "level": nivel,
+                "inscription_type": registration_type,
+                "dance_style": estilo_danca,
+                "message": nota,
+                "timestamp": timestamp
+            }
         })
     except Exception as e:
         print(f"Erro no preregister: {e}")
@@ -257,47 +269,71 @@ async def register_page(request: Request):
 async def register(
     request: Request,
     nome: str = Form(...),
-    email: str = Form(...),
     telefone: str = Form(...),
-    idade: str = Form(...),
-    experiencia_danca: str = Form(...),
-    objetivo: str = Form(...),
-    disponibilidade: str = Form(...),
-    nota: str = Form(None)  # Campo opcional
+    cidade: str = Form(...),
+    month: str = Form(...),      # Month from select
+    day: str = Form(...),        # Day from select
+    inscricao: str = Form(...),  # Registration type
+    nota: str = Form(None),      # Optional note
+    aceito_termos: str = Form(None)  # Terms acceptance checkbox
 ):
     """Submissão do formulário de registo completo"""
     
     # Security: Sanitize all inputs
     nome_clean = sanitize_text_input(nome, 100)
-    email_clean = sanitize_email(email)
     telefone_clean = sanitize_phone(telefone)
-    idade_clean = sanitize_text_input(idade, 10)
-    experiencia_clean = sanitize_text_input(experiencia_danca, 200)
-    objetivo_clean = sanitize_text_input(objetivo, 300)
-    disponibilidade_clean = sanitize_text_input(disponibilidade, 200)
+    cidade_clean = sanitize_text_input(cidade, 100)
+    inscricao_clean = sanitize_text_input(inscricao, 100)
     nota_clean = sanitize_text_input(nota, 500) if nota else ""
     
+    # Validate terms acceptance
+    if not aceito_termos:
+        return templates.TemplateResponse("register.html", {
+            "request": request,
+            "error": "Deve aceitar os termos e condições para completar o registo."
+        })
+    
+    # Format birth date like in Flask app
+    month_str = str(int(str(month)))
+    day_str = str(int(str(day)))
+    if len(month_str) == 1:
+        month_str = f"0{month_str}"
+    if len(day_str) == 1:
+        day_str = f"0{day_str}"
+    nascimento = f"{month_str}/{day_str}"
+    
     # Validate required fields
-    if not nome_clean or not email_clean or not telefone_clean:
+    if not nome_clean or not telefone_clean or not cidade_clean:
         raise HTTPException(status_code=400, detail="Campos obrigatórios em falta ou inválidos")
     
     timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     
     try:
-        # Adicionar linha ao Google Sheets (planilha Registrations)
+        # Save to Google Sheets with correct column structure
         if GOOGLE_SHEETS_ENABLED and registration_sheet:
             registration_sheet.append_row([
-                timestamp, nome_clean, email_clean, telefone_clean, idade_clean, 
-                experiencia_clean, objetivo_clean, disponibilidade_clean, nota_clean
+                timestamp,      # A: Timestamp
+                nome_clean,     # B: Nome
+                telefone_clean, # C: Tel
+                cidade_clean,   # D: Cidade
+                nascimento,     # E: Nascimento (formatted MM/DD)
+                inscricao_clean,  # F: Inscrição
+                nota_clean        # G: Nota
             ])
             print(f"✅ Registo completo salvo no Google Sheets: {nome_clean} - {timestamp}")
         else:
-            print(f"📝 Google Sheets não disponível. Registo: {nome_clean}, {email_clean}, {telefone_clean}")
+            print(f"📝 Google Sheets não disponível. Registo: {nome_clean}, {telefone_clean}, {cidade_clean}")
         
-        # Redirecionar para página de sucesso
+        # Redirect to success page
         return templates.TemplateResponse("register_success.html", {
             "request": request,
             "registration": {"name": nome_clean, "timestamp": timestamp}
+        })
+    except Exception as e:
+        print(f"Erro no registo: {e}")
+        return templates.TemplateResponse("register.html", {
+            "request": request,
+            "error": "Falha no registo. Por favor, tente novamente."
         })
     except Exception as e:
         print(f"Erro no registo: {e}")
