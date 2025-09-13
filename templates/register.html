@@ -95,6 +95,82 @@
                 </p>
             </div>
 
+            <!-- Course Overview -->
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                    <i class="fas fa-calendar-alt text-indigo-600 mr-2"></i>
+                    Informações do Curso
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-4">
+                        <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">
+                                <i class="fas fa-calendar-check text-blue-600 mr-1"></i>
+                                Datas Importantes
+                            </h3>
+                            <p class="text-sm text-gray-700"><strong>Início do Ano Letivo:</strong> Ter 7 Out '25</p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">
+                                <i class="fas fa-clock text-green-600 mr-1"></i>
+                                Horários
+                            </h3>
+                            <div class="text-sm text-gray-700 space-y-1">
+                                <p><strong>Iniciado:</strong> Terças às 21h</p>
+                                <p><strong>Intermédio:</strong> Terças às 22h</p>
+                                <p><strong>Avançado:</strong> Proximamente</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">
+                                <i class="fas fa-map-marker-alt text-purple-600 mr-1"></i>
+                                Localização
+                            </h3>
+                            <div class="text-sm text-gray-700">
+                                <p>Tao Yoga e Bem-Estar</p>
+                                <p>R. Fernando Tomás 15, 1º</p>
+                                <p>3080-055 Figueira da Foz</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">
+                                <i class="fas fa-euro-sign text-yellow-600 mr-1"></i>
+                                Mensalidade
+                            </h3>
+                            <div class="text-sm text-gray-700">
+                                <p><strong>Basal:</strong> 25€*</p>
+                                <p class="text-xs text-gray-600 mt-1">*Mensalidade para o nível Iniciado. Para níveis acima de Iniciado, acresce valor.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-red-50 to-pink-50 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">
+                                <i class="fas fa-music text-red-600 mr-1"></i>
+                                Estilos de Dança
+                            </h3>
+                            <p class="text-sm text-gray-700">Merengue, Salsa, Bachata, Kizomba, ChaChaCha e outros ritmos afrolatinos</p>
+                        </div>
+                        
+                        <div class="bg-gradient-to-r from-teal-50 to-cyan-50 rounded-lg p-4">
+                            <h3 class="font-semibold text-gray-800 mb-2">
+                                <i class="fas fa-calendar-week text-teal-600 mr-1"></i>
+                                Eventos Sociais
+                            </h3>
+                            <div class="text-sm text-gray-700 space-y-1">
+                                <p>• Sunset Café (1º domingo do mês)</p>
+                                <p>• Social Afrolatino (3º sábado do mês)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Registration Form -->
             <div class="bg-white rounded-2xl shadow-2xl p-8 md:p-10">
                 {% if error %}
@@ -171,64 +247,122 @@
                         <label for="nota">Notas/Comentários (Opcional)</label>
                     </div>
 
-                    <!-- Informações Importantes do Curso -->
-                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-4 text-center">
-                            <i class="fas fa-info-circle text-blue-600 mr-2"></i>
-                            Informações Importantes do Curso
-                        </h3>
+                    <!-- Expandable Course Information -->
+                    <div class="course-info-container">
+                        <div class="course-info-trigger">
+                            <div class="flex items-center justify-between p-4 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl text-white cursor-pointer shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-info-circle text-lg"></i>
+                                    </div>
+                                    <span class="font-semibold text-lg">Informações Importantes do Curso</span>
+                                </div>
+                                <div class="course-info-arrow transition-transform duration-300">
+                                    <i class="fas fa-chevron-down text-lg"></i>
+                                </div>
+                            </div>
+                        </div>
                         
-                        <div class="space-y-4 text-sm text-gray-700">
-                            <div>
-                                <p><strong>Início do Ano Letivo:</strong> Ter 23 Set '25</p>
-                                <p><strong>Duas Aulas Gratuitas:</strong> Ter 23 Set '25</p>
-                            </div>
-                            
-                            <div>
-                                <p><strong>HORÁRIO:</strong></p>
-                                <p><strong>Iniciado</strong> | Terças às 21h<br>
-                                <strong>Intermédio</strong> | Terças às 22h<br>
-                                <strong>Avançado</strong> | Proximamente</p>
-                            </div>
-                            
-                            <div>
-                                <p><strong>Morada da Escola:</strong><br>
-                                Tao Yoga e Bem-Estar<br>
-                                R. Fernando Tomás 15, 1º<br>
-                                3080-055 Figueira da Foz</p>
-                            </div>
-                            
-                            <div>
-                                <p><strong>Mensalidade Basal:</strong> 25€*</p>
-                                <p class="text-xs text-gray-600">* Mensalidade para o nível Iniciado, no FozCaribe e na Flowmotion. Para níveis acima de Iniciado, acresce valor.</p>
-                                <p class="text-xs text-gray-600 mt-2">A mensalidade é devida a partir do momento da inscrição, independentemente da assiduidade do aluno. A vaga do aluno fica garantida e o valor mensal mantém-se, esteja presente nas aulas ou não. A cobrança mensal só deixará de ser feita após pedido explícito de desinscrição formal.</p>
-                                <p class="text-xs text-gray-600 mt-2">A mensalidade cobre aproximadamente 85% das semanas do ano letivo, permitindo 1 a 1,5 semanas de pausa a cada 2 meses (por exemplo: feriados, férias, ausências pontuais, etc.).</p>
-                            </div>
-                            
-                            <div>
-                                <p><strong>Ritmos:</strong><br>
-                                Ritmos caribenhos, como Merengue, Salsa e Bachata, além de Kizomba, ChaChaCha e outros ritmos afrolatinos.</p>
-                            </div>
-                            
-                            <div>
-                                <p><strong>Eventos:</strong><br>
-                                Nós, do FozCaribe, organizamos eventos e encontros sociais mensais para incentivar a prática dos ensinamentos semanais e extraordinários (workshops e eventos), assim como fortalecer a coesão da família caribenha. :)</p>
-                                <p class="text-xs text-gray-600 mt-1">• Sunset Café no primeiro domingo do mês</p>
-                                <p class="text-xs text-gray-600">• Social Afrolatino no terceiro sábado do mês</p>
+                        <div class="course-info-content">
+                            <div class="bg-white border-2 border-indigo-200 rounded-b-xl shadow-xl overflow-hidden">
+                                <div class="p-6 space-y-6">
+                                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                        <h4 class="font-semibold text-yellow-800 mb-3">
+                                            <i class="fas fa-exclamation-triangle mr-1"></i>
+                                            Condições Importantes de Pagamento
+                                        </h4>
+                                        
+                                        <div class="space-y-3">
+                                            <!-- Pricing Structure -->
+                                            <div class="bg-white/50 rounded-lg p-3 border border-yellow-200">
+                                                <h5 class="font-semibold text-yellow-800 text-sm mb-2">💰 Estrutura de Preços</h5>
+                                                <div class="text-xs text-yellow-700 space-y-1">
+                                                    <p><strong>Mensalidade Basal: 25€*</strong></p>
+                                                    <p>* <em>Aplicável apenas ao nível Iniciado no FozCaribe e Flowmotion</em></p>
+                                                    <p>• <strong>Níveis Intermédio/Avançado:</strong> Valor superior (consultar valores específicos)</p>
+                                                    <p>• <strong>Workshops e eventos especiais:</strong> Custos adicionais</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Payment Terms -->
+                                            <div class="bg-white/50 rounded-lg p-3 border border-yellow-200">
+                                                <h5 class="font-semibold text-yellow-800 text-sm mb-2">📅 Termos de Pagamento</h5>
+                                                <div class="text-xs text-yellow-700 space-y-1">
+                                                    <p>• <strong>Início da cobrança:</strong> A partir do momento da inscrição (não da primeira aula)</p>
+                                                    <p>• <strong>Assiduidade:</strong> Pagamento devido independentemente da sua presença nas aulas</p>
+                                                    <p>• <strong>Reserva de vaga:</strong> A sua vaga fica sempre garantida, mesmo com ausências</p>
+                                                    <p>• <strong>Cancelamento:</strong> Cobrança continua até pedido formal de desinscrição</p>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Coverage Period -->
+                                            <div class="bg-white/50 rounded-lg p-3 border border-yellow-200">
+                                                <h5 class="font-semibold text-yellow-800 text-sm mb-2">📆 Período de Cobertura</h5>
+                                                <div class="text-xs text-yellow-700 space-y-1">
+                                                    <p>• <strong>Cobertura:</strong> Aproximadamente 85% das semanas do ano letivo</p>
+                                                    <p>• <strong>Pausas incluídas:</strong> 1 a 1,5 semanas de pausa a cada 2 meses</p>
+                                                    <p>• <strong>Exemplos de pausas:</strong> Feriados nacionais, férias escolares, ausências pontuais do professor</p>
+                                                    <p>• <strong>Compensação:</strong> Aulas em falta podem ser repostas ou compensadas</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         
                         <!-- Acceptance Checkbox -->
-                        <div class="mt-6 pt-4 border-t border-blue-200">
-                            <label class="flex items-start space-x-3 cursor-pointer">
+                        <div class="mt-4">
+                            <label class="flex items-start space-x-3 cursor-pointer p-4 bg-gray-50 rounded-xl border-2 border-gray-200 hover:border-indigo-300 transition-colors">
                                 <input type="checkbox" id="aceito_termos" name="aceito_termos" required 
-                                       class="mt-1 h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                       class="mt-1 h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 focus:ring-2">
                                 <span class="text-sm text-gray-700">
-                                    <strong>Li e aceito</strong> todas as informações acima, incluindo as condições de mensalidade, horários e política de desinscrição.
+                                    <strong class="text-indigo-600">Li e aceito todas as informações importantes do curso!</strong>
                                 </span>
                             </label>
                         </div>
                     </div>
+
+                    <style>
+                        .course-info-container {
+                            position: relative;
+                        }
+                        
+                        .course-info-content {
+                            max-height: 0;
+                            overflow: hidden;
+                            transition: max-height 0.4s ease-in-out, opacity 0.3s ease;
+                            opacity: 0;
+                        }
+                        
+                        .course-info-trigger:hover + .course-info-content,
+                        .course-info-content:hover {
+                            max-height: 1000px;
+                            opacity: 1;
+                        }
+                        
+                        .course-info-trigger:hover .course-info-arrow {
+                            transform: rotate(180deg);
+                        }
+                        
+                        .info-card {
+                            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+                            border-radius: 0.75rem;
+                            padding: 1rem;
+                            border: 1px solid #e2e8f0;
+                            transition: all 0.2s ease;
+                        }
+                        
+                        .info-card:hover {
+                            transform: translateY(-2px);
+                            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+                            border-color: #c7d2fe;
+                        }
+                        
+                        .course-info-trigger:hover {
+                            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+                        }
+                    </style>
 
                     <!-- Submit Button -->
                     <div class="pt-4">
